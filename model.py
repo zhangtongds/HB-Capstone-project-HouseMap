@@ -25,14 +25,14 @@ class Favorite(db.Model):
 
     __tablename__ = "favorites"
 
-    id = db.Column(db.Integer, autoincrement=True,  primary_key=True)
+    favorite_id = db.Column(db.Integer, autoincrement=True,  primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     property_id = db.Column(db.Integer, db.ForeignKey('properties.property_id'))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Favorite id={} user_id={} property_id={}>".format(self.id, self.user_id, self.property_id)
+        return "<Favorite favorite_id={} user_id={} property_id={}>".format(self.favorite_id, self.user_id, self.property_id)
 
     
 
@@ -60,15 +60,17 @@ class Property(db.Model):
     __tablename__ = "properties"
 
     property_id = db.Column(db.Integer, primary_key=True)
-    # search_id = db.Column(db.Integer, db.ForeignKey('searches.search_id')) #no need to referenced here
+    address = db.Column(db.String(250), nullable=True)
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
     zillow_url = db.Column(db.String(200), nullable=True) #Needs to involve in Zillow API
+    no_of_room = db.Column(db.Integer, nullable=False)
+    no_of_bath = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Property property_id={} latitude={} longitude={}>".format(self.property_id, self.latitude, self.longitude)
+        return "<Property property_id={} address={} latitude={} longitude={} no_of_room={} no_of_bath={} >".format(self.property_id, self.address, self.latitude, self.longitude, self.no_of_room, self.no_of_bath)
 
 class Sale(db.Model):
     """Sale Details."""
@@ -79,9 +81,7 @@ class Sale(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
     property_id = db.Column(db.Integer, db.ForeignKey('properties.property_id'))
     sale_trans_date = db.Column(db.DateTime, nullable=True)
-    sale_amount = db.Column(db.Float, nullable=False)
-    no_of_room = db.Column(db.Integer, nullable=False)
-    no_of_bath = db.Column(db.Float, nullable=False)
+    sale_amount = db.Column(db.Float, nullable=False)   
 
     def __repr__(self):
         """Provide helpful representation when printed."""
