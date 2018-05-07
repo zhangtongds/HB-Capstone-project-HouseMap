@@ -24,6 +24,16 @@ class Favorite(db.Model):
 
     __tablename__ = "favorites"
 
+class Search(db.Model):
+    """User searches for properties"""
+
+    __tablename__ = "searches"
+
+    search_id = db.Column(db.Ingeter, autoincrement=True, primary_key=True)
+    address = db.Column(db.String(250), nullable=True)
+    zipcode = db.Column(db.Integer, nullable=True)
+    no_of_room = db.Column(db.Integer, nullable=False)
+    no_of_bath = db.Column(db.Float, nullable=False)
 
 
 class Property(db.Model):
@@ -32,7 +42,8 @@ class Property(db.Model):
     __tablename__ = "properties"
 
     property_id = db.Column(db.Integer, primary_key=True)
-    proterty_address = db.Column(db.String(250), nullable=False)
+    zipcode = db.Column(db.Integer, db.ForeignKey('searches.zipcode'))
+    proterty_address = db.Column(db.Integer, db.ForeignKey('searches.address'))
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
     zillow_url = db.Column(db.String(200), nullable=True) #Needs to envolves in Zillow API
