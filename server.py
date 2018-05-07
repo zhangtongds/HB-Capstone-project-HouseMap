@@ -32,6 +32,13 @@ def homepage():
 
     return render_template("homepage.html")
 
+@app.route("/search")
+def get_user_input():
+    """Get user input information."""
+
+    address = request.form.get("")
+
+
 
 if __name__ == "__main__":
     app.debug = True
