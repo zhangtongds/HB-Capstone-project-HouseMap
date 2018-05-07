@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Property Search</h1>
+
+<form action='/search'>
+    <select name="info_type">
+      <option value="zipcode">By zipcode</option>
+      <option value="city">By city</option>
+      <option value="address">By address</option>
+    </select>
+    <input type="text", name="search">
+    <input type="submit" name="Submit">
+</form>
+
+
+
+{% endblock %}
