@@ -39,18 +39,18 @@ def show_registration():
 @app.route('/register', methods=['POST'])
 def register_form():
 
+    fname = request.form.get("fname")
+    lname = request.form.get("lname")
     email = request.form.get("user-email")
     password = request.form.get("user-password")
-    print email
+    zipcode = request.form.get("zipcode")
     found_email = User.query.filter(User.email == email).first()
-    print found_email
-    print "============"
 
     if found_email:
         flash("You alreday have an account, please log in.")
         return redirect('/login')
     else:
-        user = User(email=email, password=password)
+        user = User(fname= fname, lname=lname, email=email, password=password, zipcode=zipcode)
         # print user
         # print "============"
         db.session.add(user)
@@ -77,9 +77,8 @@ def verify_login():
             session['user_id'] = found_user.user_id
             # print found_user
             flash("You were successfully logged in")
-            # return redirect("/users/" + str(find_user.user_id))
-            return redirect("/")  # this is a temp place holder
-
+            return redirect("/users/" + str(found_user.user_id))
+            
         else:
             flash('Please enter a valid email/password')
             return redirect('/login')
@@ -95,6 +94,14 @@ def process_logout():
     flash("You were successfully logged out.")
     return redirect("/")
 
+@app.route("/users/<user_id>")
+def show_page(user_id):
+    """Shows users page"""
+    user = User.query.filter(User.user_id == user_id).first()
+    
+
+    return render_template("user.html", user=user)
+
 
 @app.route("/search")
 def get_user_input():
@@ -105,7 +112,12 @@ def get_user_input():
         address = request.args.get("address")
         city = request.args.get("city")
         state = request.args.get("state")
-        # print address, city, state
+        no_of_room = request.args.get("no_of_room")
+        no_of_bath = request.args.get("no_of_bath")
+        price_from = request.args.get("price_from")
+        price_to = request.args.get("price_to")
+        trans_date_from = request.args.get("trans_date_from")
+        trans_date_to = request.args.get("trans_date_to")
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
         reaquest_url = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
@@ -114,9 +126,20 @@ def get_user_input():
         # json_string = json.dumps(data)
         # data = json.loads(json_string)
         # print pprint.pprint(data)
-        session['property_id'] = data['property'][0]['identifier']['obPropId']
-        print session['property_id']
-    return render_template("search-results.html")
+        property_id = data['property'][0]['identifier']['obPropId']
+        # print session['property_id']
+        session['search'] = data
+
+        if session.get('user_id'):
+            search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
+            db.session.add(search)
+            db.session.commit()
+        else:
+            search = Search(address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
+            db.session.add(search)
+            db.session.commit()
+            
+    return render_template("search-results.html", property_id=property_id)
 
 
 

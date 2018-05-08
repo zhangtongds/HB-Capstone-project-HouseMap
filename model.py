@@ -10,15 +10,17 @@ class User(db.Model):
 
     __tablename__ = "users"
 
+    fname = db.Column(db.String(25), nullable=False)
+    lname = db.Column(db.String(25), nullable=False)
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    email = db.Column(db.String(64), nullable=True)
-    password = db.Column(db.String(64), nullable=True)
-    # zipcode = db.Column(db.String(15), nullable=True)
+    email = db.Column(db.String(64))
+    password = db.Column(db.String(64))
+    zipcode = db.Column(db.String(15))
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<User user_id={} email={}>".format(self.user_id, self.email)
+        return "<User fname={} lname={} zipcode= {} user_id={} email={}>".format(self.fname, self.lname, self.zipcode, self.user_id, self.email)
 
 class Favorite(db.Model):
     """properities that users marked as favorite."""
@@ -45,10 +47,17 @@ class Search(db.Model):
 
     search_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    address = db.Column(db.String(250), nullable=True)
-    zipcode = db.Column(db.Integer, nullable=True)
-    no_of_room = db.Column(db.Integer, nullable=False)
-    no_of_bath = db.Column(db.Float, nullable=False)
+    address = db.Column(db.String(250))
+    zipcode = db.Column(db.Integer)
+    city = db.Column(db.String(50))
+    state = db.Column(db.String(50))
+    trans_type = db.Column(db.String(10))
+    no_of_room = db.Column(db.Integer)
+    no_of_bath = db.Column(db.Float)
+    price_from = db.Column(db.Integer)
+    price_to = db.Column(db.Integer)
+    trans_date_from = db.Column(db.DateTime)
+    trans_date_to = db.Column(db.DateTime)
 
     user = db.relationship("User", backref=db.backref("searches", order_by=search_id))
 
@@ -58,7 +67,7 @@ class Search(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Search search_id={} user_id={} address={} zipcode={} no_of_room={} no_of_bath={}>".format(self.search_id, self.user_id, self.address, self.zipcode, self.no_of_room, self.no_of_bath)
+        return "<Search search_id={} user_id={} address={} zipcode={} city={} no_of_room={} no_of_bath={}>".format(self.search_id, self.user_id, self.address, self.zipcode, self.city, self.no_of_room, self.no_of_bath)
 
 
 class Property(db.Model):
@@ -67,10 +76,10 @@ class Property(db.Model):
     __tablename__ = "properties"
 
     property_id = db.Column(db.Integer, primary_key=True)
-    address = db.Column(db.String(250), nullable=True)
-    latitude = db.Column(db.Float, nullable=True)
-    longitude = db.Column(db.Float, nullable=True)
-    zillow_url = db.Column(db.String(200), nullable=True) #Needs to involve in Zillow API
+    address = db.Column(db.String(250))
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    zillow_url = db.Column(db.String(200)) #Needs to involve in Zillow API
     no_of_room = db.Column(db.Integer, nullable=False)
     no_of_bath = db.Column(db.Float, nullable=False)
 
@@ -87,7 +96,7 @@ class Sale(db.Model):
 
     sale_id = db.Column(db.Integer, primary_key=True)
     property_id = db.Column(db.Integer, db.ForeignKey('properties.property_id'))
-    sale_trans_date = db.Column(db.DateTime, nullable=True)
+    sale_trans_date = db.Column(db.DateTime)
     sale_amount = db.Column(db.Float, nullable=False)
 
     _property = db.relationship("Property", backref=db.backref("sales", order_by=sale_id)) 

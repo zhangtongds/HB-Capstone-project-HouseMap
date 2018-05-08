@@ -10,8 +10,23 @@
       <option value="address">By address</option>
     </select><br>
     Address<input type="text", name="address"><br>
-    City  <input type="text", name="city">  State  <input type="text", name="state"><br>
-    <input type="submit" name="Submit">
+    City  <input type="text", name="city">  
+    State  <input type="text", name="state"><br>
+    <br>
+    <br>
+    Filters:<br>
+    Property Type: 
+    <select name="prop_type">
+      <option value="Sale">Sale</option>
+      <option value="Rent">Rent</option>
+    </select><br>
+    Number of bedrooms: <input type="number", name="no_of_room">
+    Number of bathrooms: <input type="number", name="no_of_bath"><br>
+    Search transactions from: <input type="date", name="trans_date_from">
+    to: <input type="date", name="trans_date_to"><br>
+    Price range from: <input type="number", name="price_from">
+    to: <input type="number", name="price_to"><br>
+    <input type="submit" name="Submit" value="Search">
 </form>
 
 

@@ -3,10 +3,16 @@
 
   <h2>Register</h2>
   <form action='/register' method='POST'>
+    Your first name:<br>
+    <input type="text" name="fname"><br>
+    Your last name:<br>
+    <input type="text" name="lname"><br>
+    Your home zipcode:<br>
+    <input type="text" name="zipcode"><br>
     Email:<br>
     <input type="email" name="user-email"><br>
     Password: <br>
-    <input type="password" name="user-password">
+    <input type="password" name="user-password"><br>
     <input type="submit" name="Submit">
   </form>
 {% endblock %}
