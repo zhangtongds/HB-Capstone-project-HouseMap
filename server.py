@@ -1,4 +1,4 @@
-from pprint import pformat
+import pprint
 import os
 from jinja2 import StrictUndefined
 import requests
@@ -8,6 +8,7 @@ from flask import (Flask, render_template, redirect, request, flash,
 from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Favorite, Search, Property, Sale, connect_to_db, db
 from seed import parse_address_from_homepage
+import json
 
 app = Flask(__name__)
 app.secret_key = "ABC"
@@ -41,12 +42,17 @@ def get_user_input():
         # print address, city, state
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
-        # print search
-        response = requests.get(ONBOARD_URL + "/propertyapi/v1.0.0/property/detail?address1=address1&address2=address2", headers=headers) 
+        print address1, address2
+        reaquest_url = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
+        print reaquest_url
+        response = requests.get(ONBOARD_URL + reaquest_url, headers=headers) 
 
         data = response.json()
-
-        print data
+        # json_string = json.dumps(data)
+        # data = json.loads(json_string)
+        print pprint.pprint(data)
+        print data['property'][0]['identifier']['obPropId']
+        
     return render_template("search-results.html")
 
 
