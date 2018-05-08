@@ -34,7 +34,9 @@ class Favorite(db.Model):
 
         return "<Favorite favorite_id={} user_id={} property_id={}>".format(self.favorite_id, self.user_id, self.property_id)
 
-    
+    user = db.relationship("User", backref=db.backref("favorites", order_by=favorite_id))
+
+    property = db.relationship("Property", backref=db.backref("favorites", order_by=favorite_id))
 
 class Search(db.Model):
     """User searches for properties"""
@@ -47,6 +49,11 @@ class Search(db.Model):
     zipcode = db.Column(db.Integer, nullable=True)
     no_of_room = db.Column(db.Integer, nullable=False)
     no_of_bath = db.Column(db.Float, nullable=False)
+
+    user = db.relationship("User", backref=db.backref("searches", order_by=search_id))
+
+
+
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -81,7 +88,9 @@ class Sale(db.Model):
     sale_id = db.Column(db.Integer, primary_key=True)
     property_id = db.Column(db.Integer, db.ForeignKey('properties.property_id'))
     sale_trans_date = db.Column(db.DateTime, nullable=True)
-    sale_amount = db.Column(db.Float, nullable=False)   
+    sale_amount = db.Column(db.Float, nullable=False)
+
+    property = db.relationship("Property", backref=db.backref("sales", order_by=sale_id)) 
 
     def __repr__(self):
         """Provide helpful representation when printed."""
