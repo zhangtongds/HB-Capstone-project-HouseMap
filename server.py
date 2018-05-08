@@ -1,30 +1,27 @@
 from pprint import pformat
 import os
-
+from jinja2 import StrictUndefined
 import requests
-import httplib
-from flask import Flask, render_template, request, flash, redirect
+# import httplib
+from flask import (Flask, render_template, redirect, request, flash,
+                   session, jsonify)
 from flask_debugtoolbar import DebugToolbarExtension
+from model import User, Favorite, Search, Property, Sale, connect_to_db, db
+from seed import parse_address_from_homepage
 
 app = Flask(__name__)
 app.secret_key = "ABC"
 ONBOARD_KEY=os.environ['ONBOARD_KEY']
 
-# ONBOARD_URL = ""
+ONBOARD_URL = "http://search.onboard-apis.com"
 
 # conn = httplib.HTTPSConnection("search.onboard-apis.com") 
 
-# headers = { 
-#     'accept': "application/json", 
-#     'apikey': ONBOARD_KEY, 
-#     } 
+headers = { 
+    'accept': "application/json", 
+    'apikey': ONBOARD_KEY, 
+    } 
 
-# conn.request("GET", "/propertyapi/v1.0.0/property/detail?address1=4529%20Winona%20Court&address2=Denver%2C%20CO", headers=headers) 
-
-# res = conn.getresponse() 
-# data = res.read() 
-
-# print(data.decode("utf-8"))
 
 @app.route("/")
 def homepage():
@@ -35,8 +32,22 @@ def homepage():
 @app.route("/search")
 def get_user_input():
     """Get user input information."""
+    info_type = request.args.get("info_type")
+    
+    if info_type == 'address':
+        address = request.args.get("address")
+        city = request.args.get("city")
+        state = request.args.get("state")
+        # print address, city, state
+        address1 = address.replace(" ", "%20")
+        address2 = city + "%2C%20" + state
+        # print search
+        response = requests.get(ONBOARD_URL + "/propertyapi/v1.0.0/property/detail?address1=address1&address2=address2", headers=headers) 
 
-    address = request.form.get("")
+        data = response.json()
+
+        print data
+    return render_template("search-results.html")
 
 
 
