@@ -6,11 +6,14 @@
 <body>
 	<a href="/">Homepage</a> 
 	
-	{% if session.get('user') %}
+	{% if session.get('user_id') %}
 	<a href="/logout">Log Out</a>
 	{% else %}
 	<a href="/login">Log In</a>
 	{% endif %}
+    {% if not session.get('user_id') %}
+    <a href="/register">Register</a> 
+    {% endif %}
 	<hr>
 
 	 {% with messages = get_flashed_messages() %}

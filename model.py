@@ -36,7 +36,7 @@ class Favorite(db.Model):
 
     user = db.relationship("User", backref=db.backref("favorites", order_by=favorite_id))
 
-    property = db.relationship("Property", backref=db.backref("favorites", order_by=favorite_id))
+    _property = db.relationship("Property", backref=db.backref("favorites", order_by=favorite_id))
 
 class Search(db.Model):
     """User searches for properties"""
@@ -90,7 +90,7 @@ class Sale(db.Model):
     sale_trans_date = db.Column(db.DateTime, nullable=True)
     sale_amount = db.Column(db.Float, nullable=False)
 
-    property = db.relationship("Property", backref=db.backref("sales", order_by=sale_id)) 
+    _property = db.relationship("Property", backref=db.backref("sales", order_by=sale_id)) 
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -107,13 +107,12 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
+    
 
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
     # you in a state of being able to work with the database directly.
 
-    # from server import app
-    from flask import Flask
-    app = Flask(__name__)
+    from server import app
     connect_to_db(app)
     print "Connected to DB."
