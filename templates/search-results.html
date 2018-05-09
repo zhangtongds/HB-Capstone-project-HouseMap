@@ -16,7 +16,11 @@ Sales Details:
     <li>
         Sale Date: {{  sale[0]  }}   Price: ${{  sale[1]  }}
     </li>
-{% endfor %}
+    {% endfor %}
 </ul>
+
+{% if session.get('user_id') %}
+    Search History:
+{% endif %}
 
 {% endblock %}

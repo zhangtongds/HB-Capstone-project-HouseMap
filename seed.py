@@ -1,13 +1,19 @@
 "Functions to parse data."
 
-def parse_address_from_result(address, address2):
+# def parse_address_from_result(address, city, state):
 
-    address = address1 + " " + address2.replace(",", "")
+#     address = address1 + " " + address2.replace(",", "")
 
-    return address[:-6].replace(" ", "%20")
+#     return address[:-6].replace(" ", "%20")
 
-def parse_address_from_homepage(address, city, state):
+# def get_property_by_address():
 
-    address = address + " " + city + " " + state
 
-    return address.replace(" ", "%20")
+
+
+
+# def get_sales_by_address():
+
+
+
+    

@@ -7,7 +7,7 @@ from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
 from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Favorite, Search, Property, Sale, connect_to_db, db
-from seed import parse_address_from_homepage
+# from seed import parse_address_from_homepage
 import json
 
 app = Flask(__name__)
@@ -27,8 +27,17 @@ headers = {
 @app.route("/")
 def homepage():
     """Show homepage."""
-
-    return render_template("homepage.html")
+    search_type = request.args.get('search_type')
+    session['search_type'] = search_type
+    if search_type is None:
+        search_type = 'zip'
+    field_map = {
+        'zip': ['zip'],
+        'address': ['address', 'city', 'state'],
+        'city': ['city']
+    }
+    allowed_fields = field_map[search_type]
+    return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
 
 @app.route("/register", methods=['GET'])
 def show_registration():
@@ -106,9 +115,11 @@ def show_page(user_id):
 @app.route("/search")
 def get_user_input():
     """Get user input information."""
-    info_type = request.args.get("info_type")
+    search_type = session['search_type']
     
-    if info_type == 'address':
+    temp = request.args
+    print temp
+    if search_type == 'address':
         address = request.args.get("address")
         city = request.args.get("city")
         state = request.args.get("state")
@@ -136,6 +147,7 @@ def get_user_input():
             trans_date_to = request.args.get("trans_date_to")
         else:
             trans_date_to = None
+
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
         reaquest_url_prop = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
@@ -144,10 +156,7 @@ def get_user_input():
         response_sale = requests.get(ONBOARD_URL + request_url_sale, headers=headers) 
         data_prop = response_prop.json()
         data_sale = response_sale.json()
-        # json_string = json.dumps(data_prop)
-        # data_prop = json.loads(json_string)
-        # print pprint.pprint(data_prop)
-        # print pprint.pprint(data_sale)
+
         property_id = data_prop['property'][0]['identifier']['obPropId']
         zipcode = data_prop['property'][0]['address']['postal1'] + "-" + data_prop['property'][0]['address']['postal2']
         sale_history = [] # creat a list of sales history to pass to the front end.
@@ -160,13 +169,9 @@ def get_user_input():
             search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
             db.session.add(search)
             db.session.commit()
-        # else:  # no need to save the search if the user is nog logged in.
-        #     search = Search(address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
-        #     db.session.add(search)
-        #     db.session.commit()
+      
             
     return render_template("search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode=zipcode, sale_history=sale_history)
-
 
 
 if __name__ == "__main__":

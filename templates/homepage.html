@@ -3,30 +3,37 @@
 
 <h1>Property Search</h1>
 
+<script>
+</script>
+
 <form action='/search'>
-    <select name="info_type">
-      <option value="zipcode">By zipcode</option>
-      <option value="city">By city</option>
-      <option value="address">By address</option>
-    </select><br>
-    Address<input type="text", name="address"><br>
-    City  <input type="text", name="city">  
-    State  <input type="text", name="state"><br>
+    <a href="?search_type=zip">Search By Zip</a><br>
+    <a href="?search_type=address">Search By Address</a><br>
+    <a href="?search_type=city">Search By City</a><br>
+
+    {% for allowed_field in allowed_fields %}
+    {{ allowed_field.capitalize() }} <input type="text", name={{ allowed_field }}><br>
+    {% endfor %}
     <br>
     <br>
-    Filters:<br>
-    Property Type: 
-    <select name="prop_type">
-      <option value="Sale">Sale</option>
-      <option value="Rent">Rent</option>
-    </select><br>
-    Number of bedrooms: <input type="number", name="no_of_room">
-    Number of bathrooms: <input type="number", name="no_of_bath"><br>
-    Search transactions from: <input type="date", name="trans_date_from">
-    to: <input type="date", name="trans_date_to"><br>
-    Price range from: <input type="number", name="price_from">
-    to: <input type="number", name="price_to"><br>
+    {% if search_type != 'address' %}
+        Filters:<br>
+        Property Type: 
+        <select name="prop_type">
+          <option value="Sale">Sale</option>
+          <option value="Rent">Rent</option>
+        </select><br>
+        Number of bedrooms: <input type="number", name="no_of_room">
+        Number of bathrooms: <input type="number", name="no_of_bath"><br>
+        Search transactions from: <input type="date", name="trans_date_from">
+        to: <input type="date", name="trans_date_to"><br>
+        Price range from: <input type="number", name="price_from">
+        to: <input type="number", name="price_to"><br>
+        
+    {% endif %}
+
     <input type="submit" name="Submit" value="Search">
+    
     <br>
     <br>
     <br>
