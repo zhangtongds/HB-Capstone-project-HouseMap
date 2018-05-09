@@ -28,13 +28,13 @@ headers = {
 def homepage():
     """Show homepage."""
     search_type = request.args.get('search_type')
-    session['search_type'] = search_type
     if search_type is None:
-        search_type = 'zip'
+        search_type = 'postalcode'
+    session['search_type'] = search_type
     field_map = {
-        'zip': ['zip'],
+        'postalcode': ['postalcode'],
         'address': ['address', 'city', 'state'],
-        'city': ['city']
+        'cityName': ['cityName']
     }
     allowed_fields = field_map[search_type]
     return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
@@ -116,43 +116,17 @@ def show_page(user_id):
 def get_user_input():
     """Get user input information."""
     search_type = session['search_type']
-    
-    temp = request.args
-    print temp
+    print search_type
     if search_type == 'address':
         address = request.args.get("address")
         city = request.args.get("city")
         state = request.args.get("state")
-        if request.args.get("no_of_room"):
-            no_of_room = request.args.get("no_of_room")
-        else:
-            no_of_room = None
-        if request.args.get("no_of_bath"):
-            no_of_bath = request.args.get("no_of_bath")
-        else:
-            no_of_bath = None
-        if request.args.get("price_from"):
-            price_from = request.args.get("price_from")
-        else:
-            price_from = None
-        if request.args.get("price_to"):
-            price_to = request.args.get("price_to")
-        else: 
-            price_to = None
-        if request.args.get("trans_date_from"):
-            trans_date_from = request.args.get("trans_date_from")
-        else:
-            trans_date_from = None
-        if request.args.get("trans_date_to"):
-            trans_date_to = request.args.get("trans_date_to")
-        else:
-            trans_date_to = None
 
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
-        reaquest_url_prop = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
+        request_url_prop = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
         request_url_sale = "/propertyapi/v1.0.0/saleshistory/detail?address1="+ address1 + "&address2=" + address2
-        response_prop = requests.get(ONBOARD_URL + reaquest_url_prop, headers=headers)
+        response_prop = requests.get(ONBOARD_URL + request_url_prop, headers=headers)
         response_sale = requests.get(ONBOARD_URL + request_url_sale, headers=headers) 
         data_prop = response_prop.json()
         data_sale = response_sale.json()
@@ -164,14 +138,71 @@ def get_user_input():
             sale_history.append((sale['amount']['salerecdate'], sale['amount']['saleamt']))
         session['search_prop'] = data_prop
         session['search_sale'] = data_sale
-        print sale_history
+
+        return render_template("address-search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode=zipcode, sale_history=sale_history)
+
+    
+    else:
+        params_name_map = { "property_type": "propertyType",
+                            "max_no_bed": "maxBeds",
+                            "min_no_bed": "minBeds",
+                            "max_no_bath": "maxBathsTotal",
+                            "min_no_bath": "minBathsTotal",
+                            "price_from": "minAssdTtlValue",
+                            "price_to": "maxAssdTtlValue",
+                            "trans_date_from": "startSaleTransDate",
+                            "trans_date_to": "endSaleTransDate"}
+
+        search_params_key = [search_type, 'property_type', 'max_no_bed','min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
+       
+        url = "https://search.onboard-apis.com/propertyapi/v1.0.0/sale/snapshot?"
+        url_params = []
+        for search_param in search_params_key:
+            value = request.args.get(search_param)
+            if value != None and value != "":
+                url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
+        request_url = url + '&'.join(url_params)
+
+
+        print request_url
+        print "=========="
+        response = requests.get(request_url, headers=headers)
+    
+        data = response.json()
+        # print pprint.pprint(data)
+        property_sales = {}
+    
+        for item in data['property']:
+            key = item['identifier']['obPropId']
+            value = item['sale']['amount']['saleamt']
+            property_sales[key] = value
+        no_results = len(property_sales.values())
+        if no_results >0:
+            avg_price = sum(property_sales.values())/len(property_sales.values())
+            max_price = [0,0]
+            min_price = [0,100000000000000000]
+            area = None
+            for key, value in property_sales.items():
+                if value > max_price[1]:
+                    max_price[1] = value
+                    max_price[0] = key
+                if value < min_price[1] and value != 0:
+                    min_price[1] = value
+                    min_price[0] = key
+                    area = data['property'][0]['address']['line2']
+            return render_template("other-search-results.html", area=area, avg_price=avg_price, max_price=max_price, min_price=min_price, no_results=no_results)
+        else:
+            return render_template("other-search-results.html", no_results=0)
+
         if session.get('user_id'):
             search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
             db.session.add(search)
             db.session.commit()
       
             
-    return render_template("search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode=zipcode, sale_history=sale_history)
+        
+
+    # return redirect("/")
 
 
 if __name__ == "__main__":

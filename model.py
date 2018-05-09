@@ -52,12 +52,15 @@ class Search(db.Model):
     city = db.Column(db.String(50))
     state = db.Column(db.String(50))
     trans_type = db.Column(db.String(10))
-    no_of_room = db.Column(db.Integer)
-    no_of_bath = db.Column(db.Float)
+    max_no_bed = db.Column(db.Integer)
+    min_no_bed = db.Column(db.Integer)
+    max_no_bath = db.Column(db.Integer)
+    min_no_bath = db.Column(db.Integer)
     price_from = db.Column(db.Integer)
     price_to = db.Column(db.Integer)
     trans_date_from = db.Column(db.DateTime)
     trans_date_to = db.Column(db.DateTime)
+    property_type = db.Column(db.String(50))
 
     user = db.relationship("User", backref=db.backref("searches", order_by=search_id))
 
