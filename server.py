@@ -112,34 +112,60 @@ def get_user_input():
         address = request.args.get("address")
         city = request.args.get("city")
         state = request.args.get("state")
-        no_of_room = request.args.get("no_of_room")
-        no_of_bath = request.args.get("no_of_bath")
-        price_from = request.args.get("price_from")
-        price_to = request.args.get("price_to")
-        trans_date_from = request.args.get("trans_date_from")
-        trans_date_to = request.args.get("trans_date_to")
+        if request.args.get("no_of_room"):
+            no_of_room = request.args.get("no_of_room")
+        else:
+            no_of_room = None
+        if request.args.get("no_of_bath"):
+            no_of_bath = request.args.get("no_of_bath")
+        else:
+            no_of_bath = None
+        if request.args.get("price_from"):
+            price_from = request.args.get("price_from")
+        else:
+            price_from = None
+        if request.args.get("price_to"):
+            price_to = request.args.get("price_to")
+        else: 
+            price_to = None
+        if request.args.get("trans_date_from"):
+            trans_date_from = request.args.get("trans_date_from")
+        else:
+            trans_date_from = None
+        if request.args.get("trans_date_to"):
+            trans_date_to = request.args.get("trans_date_to")
+        else:
+            trans_date_to = None
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
-        reaquest_url = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
-        response = requests.get(ONBOARD_URL + reaquest_url, headers=headers) 
-        data = response.json()
-        # json_string = json.dumps(data)
-        # data = json.loads(json_string)
-        # print pprint.pprint(data)
-        property_id = data['property'][0]['identifier']['obPropId']
-        # print session['property_id']
-        session['search'] = data
-
+        reaquest_url_prop = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
+        request_url_sale = "/propertyapi/v1.0.0/saleshistory/detail?address1="+ address1 + "&address2=" + address2
+        response_prop = requests.get(ONBOARD_URL + reaquest_url_prop, headers=headers)
+        response_sale = requests.get(ONBOARD_URL + request_url_sale, headers=headers) 
+        data_prop = response_prop.json()
+        data_sale = response_sale.json()
+        # json_string = json.dumps(data_prop)
+        # data_prop = json.loads(json_string)
+        # print pprint.pprint(data_prop)
+        # print pprint.pprint(data_sale)
+        property_id = data_prop['property'][0]['identifier']['obPropId']
+        zipcode = data_prop['property'][0]['address']['postal1'] + "-" + data_prop['property'][0]['address']['postal2']
+        sale_history = [] # creat a list of sales history to pass to the front end.
+        for sale in data_sale['property'][0]['salehistory']:
+            sale_history.append((sale['amount']['salerecdate'], sale['amount']['saleamt']))
+        session['search_prop'] = data_prop
+        session['search_sale'] = data_sale
+        print sale_history
         if session.get('user_id'):
             search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
             db.session.add(search)
             db.session.commit()
-        else:
-            search = Search(address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
-            db.session.add(search)
-            db.session.commit()
+        # else:  # no need to save the search if the user is nog logged in.
+        #     search = Search(address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
+        #     db.session.add(search)
+        #     db.session.commit()
             
-    return render_template("search-results.html", property_id=property_id)
+    return render_template("search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode=zipcode, sale_history=sale_history)
 
 
 
