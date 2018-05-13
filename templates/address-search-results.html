@@ -22,5 +22,19 @@ Sales Details:
 {% if session.get('user_id') %}
     Search History:
 {% endif %}
+<button type="button", id='saved-property'> Save this property
+<script>
+    "use strict";
 
+    function handleSave(evt) {
+        $.post('/search', {}, function (data) {
+            $('#saved-property').text('Property Saved.');
+            $('#saved-property').attr('disabled', true);
+            console.log(data);
+        });
+    }
+
+    $('#saved-property').on('click', handleSave);
+
+</script>
 {% endblock %}

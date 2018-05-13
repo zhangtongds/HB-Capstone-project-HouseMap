@@ -12,6 +12,25 @@
     The maximum price is ${{ max_price[1] }} for property {{ max_price[0] }}.<br>
     <br>
 {% else %}
-{% endif %}
+
     Sorry, no results, please search again.
+{% endif %}
+
+<button type="button", id='saved-search'> Save this search</button>
+
+
+<script>
+    "use strict";
+
+    function handleSave(evt) {
+        $.post('/search', {save_type : "search"}, function (data) {
+            $('#saved-search').text('Search saved');
+            $('#saved-search').attr('disabled', true);
+            console.log(data);
+        });
+    }
+
+    $('#saved-search').on('click', handleSave);
+
+</script>
 {% endblock %}

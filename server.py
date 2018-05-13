@@ -155,10 +155,12 @@ def get_user_input():
 
         search_params_key = [search_type, 'property_type', 'max_no_bed','min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
        
-        url = "https://search.onboard-apis.com/propertyapi/v1.0.0/sale/snapshot?"
+        url = "https://search.onboard-apis.com/propertyapi/v1.0.0/sale/snapshot?pageSize=200000&"
         url_params = []
         for search_param in search_params_key:
             value = request.args.get(search_param)
+            if search_param == 'cityName':
+                value = value.replace(" ", "%20")
             if value != None and value != "":
                 url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
         request_url = url + '&'.join(url_params)
@@ -177,11 +179,14 @@ def get_user_input():
             value = item['sale']['amount']['saleamt']
             property_sales[key] = value
         no_results = len(property_sales.values())
+        print no_results
         if no_results >0:
-            avg_price = sum(property_sales.values())/len(property_sales.values())
+            sum_price = 0.0
+            no_units = 0
             max_price = [0,0]
-            min_price = [0,100000000000000000]
+            min_price = [0,float("inf")]
             area = None
+            # print property_sales
             for key, value in property_sales.items():
                 if value > max_price[1]:
                     max_price[1] = value
@@ -190,6 +195,12 @@ def get_user_input():
                     min_price[1] = value
                     min_price[0] = key
                     area = data['property'][0]['address']['line2']
+                if value != 0:
+                    sum_price += float(value)
+                    no_units += 1
+
+            avg_price = int(sum_price/no_units)
+
             return render_template("other-search-results.html", area=area, avg_price=avg_price, max_price=max_price, min_price=min_price, no_results=no_results)
         else:
             return render_template("other-search-results.html", no_results=0)
@@ -198,7 +209,15 @@ def get_user_input():
             search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
             db.session.add(search)
             db.session.commit()
-      
+
+
+@app.route("/search", methods=["POST"])
+def save_search():
+    print request.form.get('save_type')
+    saved_property = True
+    print saved_property
+    print "$$$$$$$$$$$"
+    return jsonify({'Result': saved_property})
             
         
 
