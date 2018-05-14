@@ -5,7 +5,7 @@
     We have searched your area: {{ area }}<br>
     <br>
     <br>
-    {% if area_trend %}
+    {% if not area_trend %}
         The median property price is ${{ median_price[1]  }}.<br>
         <br>
     {% endif %}

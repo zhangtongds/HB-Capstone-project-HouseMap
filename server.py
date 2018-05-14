@@ -35,7 +35,7 @@ def homepage():
     field_map = {
         'postalcode': ['postalcode'],
         'address': ['address', 'city', 'state'],
-        'cityName': ['cityName','state']
+        'cityName': ['city','state']
     }
     allowed_fields = field_map[search_type]
     return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
@@ -157,21 +157,25 @@ def get_user_input():
        
         url = "https://search.onboard-apis.com/propertyapi/v1.0.0/sale/snapshot?pageSize=200000&"
         url_params = []
-        # db_term = {}
+        city = request.args.get('city')
+        state = request.args.get('state')
         for search_param in search_params_key:
             value = request.args.get(search_param)
             # print search_param, value
             session['search_param'] = value
             print search_param, session['search_param']            
             if search_param == 'cityName':
-                value = value.replace(" ", "%20")
+                print city, state
+                
             if value != None and value != "":
+                value = value.replace(" ", "%20")
                 url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
                 # db_term[search_param] = value
         # session['db_term'] = db_term
         # print session['db_term']
         request_url = url + '&'.join(url_params)
-        # print request_url
+        request_url = request_url + 'cityName=' + city
+        print request_url
         sales_response = requests.get(request_url, headers=headers)    
         sales_data = sales_response.json()
         # print pprint.pprint(sales_data)
@@ -208,7 +212,7 @@ def get_user_input():
             return render_template("other-search-results.html", median_price=median_price, no_results=no_results, area=area, percent_25_price=percent_25_price, percent_75_price=percent_75_price)
         else:
             return render_template("other-search-results.html", no_results=0)
-
+        # return redirect("/")
         
 
 @app.route("/search", methods=["POST"])
@@ -222,12 +226,16 @@ def save_search():
             search = Search(user_id=session.get('user_id'),zipcode=session.get('postalcode'), city=session.get('city'), state=session.get('state'), trans_type=session.get('trans_type'), max_no_bed=session.get('max_no_bed'), min_no_bed=session.get('min_no_bed'), min_no_bath=session.get('min_no_bath'), max_no_bath=session.get('max_no_bath'), price_from=session.get('price_from'), price_to=session.get('price_to'), trans_date_from=session.get('trans_date_from'), trans_date_to=session.get('trans_date_to'), property_type=session.get('property_type'))
             db.session.add(search)
             db.session.commit()
-            
+     # if save_type == 'search':
+     #    if session.get('user_id'):
+
+     #        _property = Property
+
     return jsonify({'Result': save_type})
             
      
 
-    # return redirect("/")
+    
 
 
 if __name__ == "__main__":
