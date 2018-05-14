@@ -164,9 +164,10 @@ def get_user_input():
             if value != None and value != "":
                 url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
         request_url = url + '&'.join(url_params)
+        print request_url
         sales_response = requests.get(request_url, headers=headers)    
         sales_data = sales_response.json()
-        # print pprint.pprint(sales_data)
+        print pprint.pprint(sales_data)
         property_sales = []
     
         for item in sales_data['property']:
@@ -181,22 +182,22 @@ def get_user_input():
             percent_25_price = np.percentile(property_sales, 25, axis=0)
             percent_75_price = np.percentile(property_sales, 75, axis=0)
             area = sales_data['property'][0]['address']['line2']
-        if search_type == 'postalcode':
-            zip_code = request.args.get(search_type)
-            trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
-            trend_response = requests.get(trend_url, headers=headers)
-            trend_data = trend_response.json()
-            # print pprint.pprint(trend_data)
-            area_trend = []
-            for item in trend_data['salestrends']:
-                year = item['daterange']['end']
-                avg_price = item['SalesTrend']['avgsaleprice']
-                home_count = item['SalesTrend']['homesalecount']
-                med_price = item['SalesTrend']['medsaleprice']
-                area_trend.append([year, avg_price, home_count, med_price])
-            # print area_trend
+            if search_type == 'postalcode':
+                zip_code = request.args.get(search_type)
+                trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
+                trend_response = requests.get(trend_url, headers=headers)
+                trend_data = trend_response.json()
+                # print pprint.pprint(trend_data)
+                area_trend = []
+                for item in trend_data['salestrends']:
+                    year = item['daterange']['end']
+                    avg_price = item['SalesTrend']['avgsaleprice']
+                    home_count = item['SalesTrend']['homesalecount']
+                    med_price = item['SalesTrend']['medsaleprice']
+                    area_trend.append([year, avg_price, home_count, med_price])
+                return render_template("other-search-results.html", median_price=median_price, no_results=no_results, area=area, percent_25_price=percent_25_price, percent_75_price=percent_75_price, trend_data=trend_data, area_trend=area_trend)
 
-            return render_template("other-search-results.html", median_price=median_price, no_results=no_results, area=area, percent_25_price=percent_25_price, percent_75_price=percent_75_price, trend_data=trend_data, area_trend=area_trend)
+            return render_template("other-search-results.html", median_price=median_price, no_results=no_results, area=area, percent_25_price=percent_25_price, percent_75_price=percent_75_price)
         else:
             return render_template("other-search-results.html", no_results=0)
 
