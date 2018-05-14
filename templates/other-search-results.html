@@ -5,12 +5,20 @@
     We have searched your area: {{ area }}<br>
     <br>
     <br>
-    The average property price is ${{ avg_price  }}.<br>
+    The median property price is ${{ median_price[1]  }}.<br>
     <br>
-    The minimum price is ${{ min_price[1] }} for property {{ min_price[0] }}.<br>
+    The 25% percentile price is ${{  percent_25_price[1]  }}.<br>
     <br>
-    The maximum price is ${{ max_price[1] }} for property {{ max_price[0] }}.<br>
+    The 75% percentile price is ${{  percent_75_price[1]  }}.
     <br>
+    <br>
+    <br>
+
+    {% for year, avgPrice, homeCount, medPrice in area_trend %}
+
+        Year {{ year }}, average price {{ avgPrice }}, home count {{ homeCount }}, median price {{ medPrice }}.<br>
+        <br>
+    {% endfor %}
 {% else %}
 
     Sorry, no results, please search again.

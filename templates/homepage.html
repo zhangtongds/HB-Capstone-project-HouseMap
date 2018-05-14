@@ -16,26 +16,28 @@
     {% endfor %}
     <br>
     <br>
-    {% if search_type != 'address' %}
-        Filters:<br>
-        Property Type: 
-        <select name="property_type">
-          <option value="">Not Selected</option>
-          <option value="SFR">Single Family</option>
-          <option value="apartment">Apartment</option>
-        </select><br>
-       
-        Minimum of bedrooms: <input type="number", name="min_no_bed">
-        Maximum of bedrooms: <input type="number", name="max_no_bed"><br>
-       
-        Minimum of bathrooms: <input type="number", name="min_no_bath">
-        Maximum of bathrooms: <input type="number", name="max_no_bath"><br>
-        Search transactions from: <input type="date", name="trans_date_from">
-        to: <input type="date", name="trans_date_to"><br>
-        Price range from: <input type="number", name="price_from">
-        to: <input type="number", name="price_to"><br>
-        
-    {% endif %}
+    <div id="filter">
+        {% if search_type != 'address' %}
+            Filters:<br>
+            Property Type: 
+            <select name="property_type">
+              <option value="">Not Selected</option>
+              <option value="SFR">Single Family</option>
+              <option value="apartment">Apartment</option>
+            </select><br>
+           
+            Minimum of bedrooms: <input type="number", name="min_no_bed">
+            Maximum of bedrooms: <input type="number", name="max_no_bed"><br>
+           
+            Minimum of bathrooms: <input type="number", name="min_no_bath">
+            Maximum of bathrooms: <input type="number", name="max_no_bath"><br>
+            Search transactions from: <input type="date", name="trans_date_from">
+            to: <input type="date", name="trans_date_to"><br>
+            Price range from: <input type="number", name="price_from">
+            to: <input type="number", name="price_to"><br>
+            
+        {% endif %}
+    </div>
 
     <input type="submit" name="Submit" value="Search">
 

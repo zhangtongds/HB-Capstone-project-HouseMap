@@ -9,6 +9,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Favorite, Search, Property, Sale, connect_to_db, db
 # from seed import parse_address_from_homepage
 import json
+import numpy as np
 
 app = Flask(__name__)
 app.secret_key = "ABC"
@@ -116,7 +117,6 @@ def show_page(user_id):
 def get_user_input():
     """Get user input information."""
     search_type = session['search_type']
-    print search_type
     if search_type == 'address':
         address = request.args.get("address")
         city = request.args.get("city")
@@ -164,44 +164,39 @@ def get_user_input():
             if value != None and value != "":
                 url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
         request_url = url + '&'.join(url_params)
-
-
-        print request_url
-        print "=========="
-        response = requests.get(request_url, headers=headers)
+        sales_response = requests.get(request_url, headers=headers)    
+        sales_data = sales_response.json()
+        # print pprint.pprint(sales_data)
+        property_sales = []
     
-        data = response.json()
-        # print pprint.pprint(data)
-        property_sales = {}
-    
-        for item in data['property']:
-            key = item['identifier']['obPropId']
-            value = item['sale']['amount']['saleamt']
-            property_sales[key] = value
-        no_results = len(property_sales.values())
-        print no_results
+        for item in sales_data['property']:
+            lst_0 = item['identifier']['obPropId']
+            lst_1 = item['sale']['amount']['saleamt']
+            if lst_1 != 0:
+                property_sales.append([lst_0,lst_1])
+        no_results = len(property_sales)
+        property_sales = np.array(property_sales)
         if no_results >0:
-            sum_price = 0.0
-            no_units = 0
-            max_price = [0,0]
-            min_price = [0,float("inf")]
-            area = None
-            # print property_sales
-            for key, value in property_sales.items():
-                if value > max_price[1]:
-                    max_price[1] = value
-                    max_price[0] = key
-                if value < min_price[1] and value != 0:
-                    min_price[1] = value
-                    min_price[0] = key
-                    area = data['property'][0]['address']['line2']
-                if value != 0:
-                    sum_price += float(value)
-                    no_units += 1
+            median_price = np.median(property_sales, axis=0)
+            percent_25_price = np.percentile(property_sales, 25, axis=0)
+            percent_75_price = np.percentile(property_sales, 75, axis=0)
+            area = sales_data['property'][0]['address']['line2']
+        if search_type == 'postalcode':
+            zip_code = request.args.get(search_type)
+            trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
+            trend_response = requests.get(trend_url, headers=headers)
+            trend_data = trend_response.json()
+            # print pprint.pprint(trend_data)
+            area_trend = []
+            for item in trend_data['salestrends']:
+                year = item['daterange']['end']
+                avg_price = item['SalesTrend']['avgsaleprice']
+                home_count = item['SalesTrend']['homesalecount']
+                med_price = item['SalesTrend']['medsaleprice']
+                area_trend.append([year, avg_price, home_count, med_price])
+            # print area_trend
 
-            avg_price = int(sum_price/no_units)
-
-            return render_template("other-search-results.html", area=area, avg_price=avg_price, max_price=max_price, min_price=min_price, no_results=no_results)
+            return render_template("other-search-results.html", median_price=median_price, no_results=no_results, area=area, percent_25_price=percent_25_price, percent_75_price=percent_75_price, trend_data=trend_data, area_trend=area_trend)
         else:
             return render_template("other-search-results.html", no_results=0)
 
