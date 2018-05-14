@@ -202,6 +202,7 @@ def get_user_input():
             return render_template("other-search-results.html", no_results=0)
 
         if session.get('user_id'):
+            # print session['save_type']
             search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
             db.session.add(search)
             db.session.commit()
@@ -209,13 +210,12 @@ def get_user_input():
 
 @app.route("/search", methods=["POST"])
 def save_search():
-    print request.form.get('save_type')
+    session['save_type'] = request.form.get('save_type')
     saved_property = True
-    print saved_property
-    print "$$$$$$$$$$$"
+    print session['user_id']
     return jsonify({'Result': saved_property})
             
-        
+     
 
     # return redirect("/")
 

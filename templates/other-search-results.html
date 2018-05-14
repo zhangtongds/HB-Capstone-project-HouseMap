@@ -5,8 +5,10 @@
     We have searched your area: {{ area }}<br>
     <br>
     <br>
-    The median property price is ${{ median_price[1]  }}.<br>
-    <br>
+    {% if area_trend %}
+        The median property price is ${{ median_price[1]  }}.<br>
+        <br>
+    {% endif %}
     The 25% percentile price is ${{  percent_25_price[1]  }}.<br>
     <br>
     The 75% percentile price is ${{  percent_75_price[1]  }}.
