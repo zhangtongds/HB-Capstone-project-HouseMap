@@ -27,7 +27,7 @@ Sales Details:
     "use strict";
 
     function handleSave(evt) {
-        $.post('/search', {}, function (data) {
+        $.post('/search', {save_type : "address"}, function (data) {
             $('#saved-property').text('Property Saved.');
             $('#saved-property').attr('disabled', true);
             console.log(data);

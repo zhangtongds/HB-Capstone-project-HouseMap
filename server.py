@@ -35,7 +35,7 @@ def homepage():
     field_map = {
         'postalcode': ['postalcode'],
         'address': ['address', 'city', 'state'],
-        'cityName': ['cityName']
+        'cityName': ['cityName','state']
     }
     allowed_fields = field_map[search_type]
     return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
@@ -157,17 +157,24 @@ def get_user_input():
        
         url = "https://search.onboard-apis.com/propertyapi/v1.0.0/sale/snapshot?pageSize=200000&"
         url_params = []
+        # db_term = {}
         for search_param in search_params_key:
             value = request.args.get(search_param)
+            # print search_param, value
+            session['search_param'] = value
+            print search_param, session['search_param']            
             if search_param == 'cityName':
                 value = value.replace(" ", "%20")
             if value != None and value != "":
                 url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
+                # db_term[search_param] = value
+        # session['db_term'] = db_term
+        # print session['db_term']
         request_url = url + '&'.join(url_params)
-        print request_url
+        # print request_url
         sales_response = requests.get(request_url, headers=headers)    
         sales_data = sales_response.json()
-        print pprint.pprint(sales_data)
+        # print pprint.pprint(sales_data)
         property_sales = []
     
         for item in sales_data['property']:
@@ -182,6 +189,7 @@ def get_user_input():
             percent_25_price = np.percentile(property_sales, 25, axis=0)
             percent_75_price = np.percentile(property_sales, 75, axis=0)
             area = sales_data['property'][0]['address']['line2']
+         
             if search_type == 'postalcode':
                 zip_code = request.args.get(search_type)
                 trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
@@ -201,19 +209,21 @@ def get_user_input():
         else:
             return render_template("other-search-results.html", no_results=0)
 
-        if session.get('user_id'):
-            # print session['save_type']
-            search = Search(user_id=session['user_id'], address=address, city=city, state=state, no_of_room=no_of_room, no_of_bath=no_of_bath, price_from=price_from, price_to=price_to, trans_date_from=trans_date_from, trans_date_to=trans_date_to)
-            db.session.add(search)
-            db.session.commit()
-
+        
 
 @app.route("/search", methods=["POST"])
 def save_search():
-    session['save_type'] = request.form.get('save_type')
-    saved_property = True
-    print session['user_id']
-    return jsonify({'Result': saved_property})
+    save_type = request.form.get('save_type')
+    # print session['db_term']
+    if save_type == 'search':
+        if session.get('user_id'):
+            # params = ",".join(session['db_term'])
+    
+            search = Search(user_id=session.get('user_id'),zipcode=session.get('postalcode'), city=session.get('city'), state=session.get('state'), trans_type=session.get('trans_type'), max_no_bed=session.get('max_no_bed'), min_no_bed=session.get('min_no_bed'), min_no_bath=session.get('min_no_bath'), max_no_bath=session.get('max_no_bath'), price_from=session.get('price_from'), price_to=session.get('price_to'), trans_date_from=session.get('trans_date_from'), trans_date_to=session.get('trans_date_to'), property_type=session.get('property_type'))
+            db.session.add(search)
+            db.session.commit()
+            
+    return jsonify({'Result': save_type})
             
      
 
