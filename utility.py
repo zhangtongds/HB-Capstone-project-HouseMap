@@ -12,7 +12,7 @@ def get_ten_digits_zipcode(data):
     return data['property'][0]['address']['postal1'] + "-" + data['property'][0]['address']['postal2']
 
 def get_five_digits_zipcode(data):
-    """Get five digits zipcode from property API response. """
+    """Get five digits zipcode from property API response."""
 
     return data['property'][0]['address']['postal1']
 

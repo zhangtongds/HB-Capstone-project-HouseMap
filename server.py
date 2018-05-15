@@ -16,7 +16,7 @@ app = Flask(__name__)
 app.secret_key = "ABC"
 ONBOARD_KEY=os.environ['ONBOARD_KEY']
 
-ONBOARD_URL = "http://search.onboard-apis.com"
+ONBOARD_URL = "http://search.onboard-apis.com/propertyapi/v1.0.0/"
 
 headers = { 
     'accept': "application/json", 
@@ -126,10 +126,10 @@ def get_user_input():
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
 
-        property_url = "/propertyapi/v1.0.0/property/detail?"
+        property_url = "property/detail?"
         data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
         
-        sale_url = "/propertyapi/v1.0.0/saleshistory/detail?"
+        sale_url = "saleshistory/detail?"
         data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
 
         property_id = utility.get_property_id(data_prop)
@@ -147,11 +147,11 @@ def get_user_input():
 
     else:
         params_key = ['zipcode', 'city', 'state', 'property_type', 'max_no_bed', 'min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
-        sale_url = "/propertyapi/v1.0.0/sale/snapshot?pageSize=200000&"
+        sale_url = "sale/snapshot?pageSize=200000&"
         search_params = {}
         for search_param in params_key:
             value = request.args.get(search_param)
-
+            session[search_param] = value
             if value != None and value != "":
                 search_params[search_param] = value
          
