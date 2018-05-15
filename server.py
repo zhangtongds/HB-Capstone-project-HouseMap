@@ -7,9 +7,10 @@ from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
 from flask_debugtoolbar import DebugToolbarExtension
 from model import User, Favorite, Search, Property, Sale, connect_to_db, db
-# from seed import parse_address_from_homepage
+import utility
 import json
 import numpy as np
+
 
 app = Flask(__name__)
 app.secret_key = "ABC"
@@ -131,15 +132,13 @@ def get_user_input():
         data_prop = response_prop.json()
         data_sale = response_sale.json()
 
-        property_id = data_prop['property'][0]['identifier']['obPropId']
-        zipcode = data_prop['property'][0]['address']['postal1'] + "-" + data_prop['property'][0]['address']['postal2']
-        sale_history = [] # creat a list of sales history to pass to the front end.
-        for sale in data_sale['property'][0]['salehistory']:
-            sale_history.append((sale['amount']['salerecdate'], sale['amount']['saleamt']))
+        property_id = utility.get_property_id(data_prop)
+        zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
+        sale_history = utility.get_sale_history(data_sale)
         session['search_prop'] = data_prop
         session['search_sale'] = data_sale
 
-        return render_template("address-search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode=zipcode, sale_history=sale_history)
+        return render_template("address-search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode_ten=zipcode_ten, sale_history=sale_history)
 
     
     else:
@@ -153,7 +152,7 @@ def get_user_input():
                             "trans_date_from": "startSaleTransDate",
                             "trans_date_to": "endSaleTransDate"}
 
-        search_params_key = [search_type, 'property_type', 'max_no_bed','min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
+        search_params_key = [search_type, 'property_type', 'max_no_bed', 'min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
        
         url = "https://search.onboard-apis.com/propertyapi/v1.0.0/sale/snapshot?pageSize=200000&"
         url_params = []
@@ -162,21 +161,19 @@ def get_user_input():
         for search_param in search_params_key:
             value = request.args.get(search_param)
             # print search_param, value
-            session['search_param'] = value
-            print search_param, session['search_param']            
+            session[search_param] = value
+            print search_param, session[search_param]            
             if search_param == 'cityName':
-                print city, state
+                request_url = url + '&'.join(url_params)
+                request_url = request_url + 'cityName=' + city
                 
             if value != None and value != "":
                 value = value.replace(" ", "%20")
                 url_params.append("{}={}".format(params_name_map.setdefault(search_param, search_param), value))
-                # db_term[search_param] = value
-        # session['db_term'] = db_term
-        # print session['db_term']
-        request_url = url + '&'.join(url_params)
-        request_url = request_url + 'cityName=' + city
-        print request_url
-        sales_response = requests.get(request_url, headers=headers)    
+            if search_param == 'postalcode':
+                request_url = url + '&'.join(url_params)
+        
+        sales_response = requests.get(request_url, headers=headers) 
         sales_data = sales_response.json()
         # print pprint.pprint(sales_data)
         property_sales = []
@@ -218,14 +215,30 @@ def get_user_input():
 @app.route("/search", methods=["POST"])
 def save_search():
     save_type = request.form.get('save_type')
-    # print session['db_term']
     if save_type == 'search':
+        # print 'Success****'
         if session.get('user_id'):
-            # params = ",".join(session['db_term'])
-    
-            search = Search(user_id=session.get('user_id'),zipcode=session.get('postalcode'), city=session.get('city'), state=session.get('state'), trans_type=session.get('trans_type'), max_no_bed=session.get('max_no_bed'), min_no_bed=session.get('min_no_bed'), min_no_bath=session.get('min_no_bath'), max_no_bath=session.get('max_no_bath'), price_from=session.get('price_from'), price_to=session.get('price_to'), trans_date_from=session.get('trans_date_from'), trans_date_to=session.get('trans_date_to'), property_type=session.get('property_type'))
+            # print 'success====='
+            print session
+            search = Search(
+                user_id=session.get('user_id'),
+                zipcode=session.get('postalcode'),
+                city=session.get('city'),
+                state=session.get('state'),
+                trans_type=session.get('trans_type'),
+                max_no_bed=session.get('max_no_bed'),
+                min_no_bed=session.get('min_no_bed'),
+                min_no_bath=session.get('min_no_bath'),
+                max_no_bath=session.get('max_no_bath'),
+                price_from=session.get('price_from'),
+                price_to=session.get('price_to'),
+                trans_date_from=session.get('trans_date_from'),
+                trans_date_to=session.get('trans_date_to'),
+                property_type=session.get('property_type')
+                )
             db.session.add(search)
             db.session.commit()
+            # session.clear()
      # if save_type == 'search':
      #    if session.get('user_id'):
 
