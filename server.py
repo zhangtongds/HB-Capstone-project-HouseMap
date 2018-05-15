@@ -125,12 +125,11 @@ def get_user_input():
 
         address1 = address.replace(" ", "%20")
         address2 = city + "%2C%20" + state
-        request_url_prop = "/propertyapi/v1.0.0/property/detail?address1=" + address1 + "&address2=" + address2
-        request_url_sale = "/propertyapi/v1.0.0/saleshistory/detail?address1="+ address1 + "&address2=" + address2
-        response_prop = requests.get(ONBOARD_URL + request_url_prop, headers=headers)
-        response_sale = requests.get(ONBOARD_URL + request_url_sale, headers=headers) 
-        data_prop = response_prop.json()
-        data_sale = response_sale.json()
+
+        property_url = "/propertyapi/v1.0.0/property/detail?"
+        data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
+        sale_url = "/propertyapi/v1.0.0/saleshistory/detail?"
+        data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
 
         property_id = utility.get_property_id(data_prop)
         zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
@@ -139,6 +138,7 @@ def get_user_input():
         session['search_sale'] = data_sale
 
         return render_template("address-search-results.html", property_id=property_id, address=address, city=city, state=state, zipcode_ten=zipcode_ten, sale_history=sale_history)
+        # return redirect("/")
 
     
     else:
