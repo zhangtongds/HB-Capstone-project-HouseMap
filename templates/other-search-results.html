@@ -21,12 +21,13 @@
         Year {{ year }}, average price {{ avgPrice }}, home count {{ homeCount }}, median price {{ medPrice }}.<br>
         <br>
     {% endfor %}
+    <button type="button", id='saved-search'> Save this search</button>
 {% else %}
 
     Sorry, no results, please search again.<br>
 {% endif %}
 
-<button type="button", id='saved-search'> Save this search</button>
+
 
 
 <script>

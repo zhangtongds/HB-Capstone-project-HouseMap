@@ -7,9 +7,9 @@
 </script>
 
 <form action='/search'>
-    <a href="?search_type=postalcode">Search By Zip</a><br>
+    <a href="?search_type=zipcode">Search By Zip</a><br>
     <a href="?search_type=address">Search By Address</a><br>
-    <a href="?search_type=cityName">Search By City</a><br>
+    <a href="?search_type=city">Search By City</a><br>
 
     {% for allowed_field in allowed_fields %}
     {{ allowed_field.capitalize() }} <input type="text", name={{ allowed_field }}><br>
