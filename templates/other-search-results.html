@@ -21,7 +21,7 @@
         Year {{ year }}, average price {{ avgPrice }}, home count {{ homeCount }}, median price {{ medPrice }}.<br>
         <br>
     {% endfor %}
-    <button type="button", id='saved-search'> Save this search</button>
+    <button type="button", id='saved-search', value = "{{ search_params }}" > Save this search</button>
 {% else %}
 
     Sorry, no results, please search again.<br>
@@ -29,14 +29,16 @@
 
 
 
-
 <script>
     "use strict";
 
     function handleSave(evt) {
-        $.post('/search', {save_type : "search"}, function (data) {
+        let search_params = document.getElementById("saved-search").value;
+        console.log(search_params)
+        $.post('/search', {save_type : "search", save_data: search_params }, function (data) {
             $('#saved-search').text('Search saved');
             $('#saved-search').attr('disabled', true);
+            $(this)
             console.log(data);
         });
     }
