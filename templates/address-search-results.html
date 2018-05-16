@@ -19,15 +19,13 @@ Sales Details:
     {% endfor %}
 </ul>
 
-{% if session.get('user_id') %}
-    Search History:
-{% endif %}
-<button type="button", id='saved-property'> Save this property
+<button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
 <script>
     "use strict";
 
     function handleSave(evt) {
-        $.post('/search', {save_type : "address"}, function (data) {
+        let address_params = document.getElementById("saved-property").value;
+        $.post('/search', {save_type : "address",save_data: address_params}, function (data) {
             $('#saved-property').text('Property Saved.');
             $('#saved-property').attr('disabled', true);
             console.log(data);

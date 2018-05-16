@@ -22,23 +22,23 @@ class User(db.Model):
 
         return "<User fname={} lname={} zipcode= {} user_id={} email={}>".format(self.fname, self.lname, self.zipcode, self.user_id, self.email)
 
-class Favorite(db.Model):
-    """properities that users marked as favorite."""
+# class Favorite(db.Model):
+#     """properities that users marked as favorite."""
 
-    __tablename__ = "favorites"
+#     __tablename__ = "favorites"
 
-    favorite_id = db.Column(db.Integer, autoincrement=True,  primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    property_id = db.Column(db.Integer, db.ForeignKey('properties.property_id'))
+#     favorite_id = db.Column(db.Integer, autoincrement=True,  primary_key=True)
+#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+#     property_id = db.Column(db.String(250), db.ForeignKey('properties.property_id'))
 
-    def __repr__(self):
-        """Provide helpful representation when printed."""
+#     def __repr__(self):
+#         """Provide helpful representation when printed."""
 
-        return "<Favorite favorite_id={} user_id={} property_id={}>".format(self.favorite_id, self.user_id, self.property_id)
+#         return "<Favorite favorite_id={} user_id={} property_id={}>".format(self.favorite_id, self.user_id, self.property_id)
 
-    user = db.relationship("User", backref=db.backref("favorites", order_by=favorite_id))
+#     user = db.relationship("User", backref=db.backref("favorites", order_by=favorite_id))
 
-    _property = db.relationship("Property", backref=db.backref("favorites", order_by=favorite_id))
+#     _property = db.relationship("Property", backref=db.backref("favorites", order_by=favorite_id))
 
 class Search(db.Model):
     """User searches for properties"""
@@ -61,6 +61,8 @@ class Search(db.Model):
     trans_date_from = db.Column(db.DateTime)
     trans_date_to = db.Column(db.DateTime)
     property_type = db.Column(db.String(50))
+    saved_by_user = db.Column(db.Boolean)
+    saved_date = db.Column(db.DateTime)
 
     user = db.relationship("User", backref=db.backref("searches", order_by=search_id))
 
@@ -70,7 +72,7 @@ class Search(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Search search_id={} user_id={} address={} zipcode={} city={} no_of_room={} no_of_bath={}>".format(self.search_id, self.user_id, self.address, self.zipcode, self.city, self.no_of_room, self.no_of_bath)
+        return "<Search search_id={} user_id={} address={} zipcode={} city={} state={} trans_type={} max_no_bed={} min_no_bed={} max_no_bath={} min_no_bath={} price_from={} price_to={} trans_date_from={} trans_date_to={} property_type={} saved_by_user={} saved_date={}>".format(self.search_id, self.user_id, self.address, self.zipcode, self.city, self.state, self.trans_type, self.max_no_bed, self.min_no_bed, self.max_no_bath, self.min_no_bath, self.price_from, self.price_to, self.trans_date_from, self.trans_date_to, self.property_type, self.saved_by_user, self.saved_date)
 
 
 class Property(db.Model):
@@ -78,18 +80,21 @@ class Property(db.Model):
 
     __tablename__ = "properties"
 
-    property_id = db.Column(db.Integer, primary_key=True)
+    property_id = db.Column(db.String(250), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     address = db.Column(db.String(250))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     zillow_url = db.Column(db.String(200)) #Needs to involve in Zillow API
-    no_of_room = db.Column(db.Integer, nullable=False)
-    no_of_bath = db.Column(db.Float, nullable=False)
+    no_of_beds = db.Column(db.Integer)
+    no_of_baths = db.Column(db.Float)
+    saved_date = db.Column(db.DateTime)
+    saved_by_user = db.Column(db.Boolean)
 
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Property property_id={} address={} latitude={} longitude={} no_of_room={} no_of_bath={} >".format(self.property_id, self.address, self.latitude, self.longitude, self.no_of_room, self.no_of_bath)
+        return "<Property property_id={} self.user_id={} address={} latitude={} longitude={} zillow_url={} no_of_beds={} no_of_baths={} >".format(self.property_id, self.user_id, self.address, self.latitude, self.longitude, self.no_of_beds, self.no_of_baths)
 
 class Sale(db.Model):
     """Sale Details."""
@@ -98,7 +103,7 @@ class Sale(db.Model):
 
 
     sale_id = db.Column(db.Integer, primary_key=True)
-    property_id = db.Column(db.Integer, db.ForeignKey('properties.property_id'))
+    property_id = db.Column(db.String(250), db.ForeignKey('properties.property_id'))
     sale_trans_date = db.Column(db.DateTime)
     sale_amount = db.Column(db.Float, nullable=False)
 

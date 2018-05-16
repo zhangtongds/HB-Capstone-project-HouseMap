@@ -38,7 +38,6 @@
         $.post('/search', {save_type : "search", save_data: search_params }, function (data) {
             $('#saved-search').text('Search saved');
             $('#saved-search').attr('disabled', true);
-            $(this)
             console.log(data);
         });
     }

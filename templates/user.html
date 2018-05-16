@@ -8,9 +8,12 @@
     Zipcode: {{ user.zipcode }}<br>
     <br>
     Saved properties: <br>
+    {% for search in searches %}
+    {{ search.address }}
 
+    {% endfor %}
 
-    Search history:
+    Saved searches: <br>
     
 </ul>
 

@@ -78,4 +78,27 @@ def get_area_sale_trend(data):
 
     return area_trend
 
+def get_full_address_from_result(data):
+    """Get full result including address, city, state, zipcode from result data."""
 
+    return data['property'][0]['address']['line1'] + data['property'][0]['address']['line2']
+
+def get_latitude_from_result(data):
+    """Get latitude from result data."""
+
+    return data['property'][0]['location']['latitude']
+
+def get_longitude_from_result(data):
+    """Get longitude from result data."""
+
+    return data['property'][0]['location']['longitude']
+
+def get_no_beds_from_result(data):
+    """Get number of beds for the property."""
+
+    return data['property'][0]['building']['rooms']['beds']
+
+def get_no_baths_from_result(data):
+    """Get number of baths for the property."""
+
+    return data['property'][0]['building']['rooms']['bathstotal']

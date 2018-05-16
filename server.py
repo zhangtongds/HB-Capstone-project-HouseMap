@@ -6,11 +6,12 @@ import requests
 from flask import (Flask, render_template, redirect, request, flash,
                    session, jsonify)
 from flask_debugtoolbar import DebugToolbarExtension
-from model import User, Favorite, Search, Property, Sale, connect_to_db, db
+from model import User, Search, Property, Sale, connect_to_db, db
 import utility
 import json
 import numpy as np
 import ast
+import datetime
 
 
 app = Flask(__name__)
@@ -109,9 +110,12 @@ def process_logout():
 def show_page(user_id):
     """Shows users page"""
     user = User.query.filter(User.user_id == user_id).first()
-    
+    searches = Search.query.filter(User.user_id == user_id).all()
+    properties = Property.query.filter(User.user_id == user_id).all()
+    print searches, "!!!!!!!!"
+    print properties, "**********"
 
-    return render_template("user.html", user=user)
+    return render_template("user.html", user=user,searches=searches, properties=properties)
 
 
 @app.route("/search")
@@ -136,18 +140,28 @@ def get_user_input():
         property_id = utility.get_property_id(data_prop)
         zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
         sale_history = utility.get_sale_history(data_sale)
-        session['search_prop'] = data_prop
-        session['search_sale'] = data_sale
-
+        full_address = utility.get_full_address_from_result(data_prop)
+        latitude = utility.get_latitude_from_result(data_prop)
+        longitude = utility.get_longitude_from_result(data_prop)
+        no_beds = utility.get_no_beds_from_result(data_prop)
+        no_baths = utility.get_no_beds_from_result(data_prop)
+        address_params = {"property_id": property_id,
+                            "address": full_address,
+                            "latitude": latitude,
+                            "longitude": longitude,
+                            "no_of_room": no_beds,
+                            "no_of_bath": no_baths}
+        # print address_params
         return render_template("address-search-results.html", property_id=property_id,
                                                             address=address,
                                                             city=city,
                                                             state=state,
                                                             zipcode_ten=zipcode_ten,
-                                                            sale_history=sale_history)
+                                                            sale_history=sale_history, 
+                                                            address_params=address_params)
 
     else:
-        params_key = ['zipcode', 'city', 'state', 'property_type', 'max_no_bed', 'min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
+        params_key = ['zipcode', 'city', 'property_type', 'max_no_bed', 'min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
         sale_url = "sale/snapshot?pageSize=200000&"
         search_params = {}
         for search_param in params_key:
@@ -220,15 +234,30 @@ def save_search():
                 price_to=save_data.get('price_to'),
                 trans_date_from=save_data.get('trans_date_from'),
                 trans_date_to=save_data.get('trans_date_to'),
-                property_type=save_data.get('property_type')
+                property_type=save_data.get('property_type'),
+                saved_date=datetime.datetime.now()
                 )
+
             db.session.add(search)
             db.session.commit()
 
-     # if save_type == 'search':
-     #    if session.get('user_id'):
+        if save_type == 'address':
+            save_data = request.form.get('save_data')
+            save_data = ast.literal_eval(save_data)
+            # print save_data
+            _property = Property(
+                user_id=session.get('user_id'),
+                property_id=save_data.get('property_id'),
+                address=save_data.get('address'),
+                latitude=float(save_data.get('latitude')),
+                longitude=float(save_data.get('longitude')),
+                no_of_beds=int(save_data.get('no_of_room')),
+                no_of_baths=float(save_data.get('no_of_bath')),
+                saved_date=datetime.datetime.now()
+                )
+            db.session.add(_property)
+            db.session.commit()
 
-     #        _property = Property
 
     return jsonify({'Result': save_data})
             
