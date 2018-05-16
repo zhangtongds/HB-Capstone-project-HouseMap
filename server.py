@@ -10,6 +10,7 @@ from model import User, Favorite, Search, Property, Sale, connect_to_db, db
 import utility
 import json
 import numpy as np
+import ast
 
 
 app = Flask(__name__)
@@ -182,14 +183,16 @@ def get_user_input():
                                                                     percent_75_price=percent_75_price,
                                                                     trend_data=trend_data,
                                                                     area_trend=area_trend,
-                                                                    search_params=search_params)
+                                                                    search_params=search_params
+                                                                    )
 
             return render_template("other-search-results.html", median_price=median_price,
                                                                 no_results=no_results,
                                                                 area=area,
                                                                 percent_25_price=percent_25_price,
                                                                 percent_75_price=percent_75_price,
-                                                                search_params=search_params)
+                                                                search_params=search_params
+                                                                )
         else:
             return render_template("other-search-results.html", no_results=0)
         # return redirect("/")
@@ -199,31 +202,29 @@ def get_user_input():
 def save_search():
     save_type = request.form.get('save_type')
     save_data = request.form.get('save_data')
-    print save_data
-    # if save_type == 'search':
-        # print 'Success****'
-        # if session.get('user_id'):
-        #     # print 'success====='
-        #     print session
-        #     search = Search(
-        #         user_id=session.get('user_id'),
-        #         zipcode=session.get('postalcode'),
-        #         city=session.get('city'),
-        #         state=session.get('state'),
-        #         trans_type=session.get('trans_type'),
-        #         max_no_bed=session.get('max_no_bed'),
-        #         min_no_bed=session.get('min_no_bed'),
-        #         min_no_bath=session.get('min_no_bath'),
-        #         max_no_bath=session.get('max_no_bath'),
-        #         price_from=session.get('price_from'),
-        #         price_to=session.get('price_to'),
-        #         trans_date_from=session.get('trans_date_from'),
-        #         trans_date_to=session.get('trans_date_to'),
-        #         property_type=session.get('property_type')
-        #         )
-        #     db.session.add(search)
-        #     db.session.commit()
-            # session.clear()
+    # Parsing the unicode into a dictionary.
+    save_data = ast.literal_eval(save_data)
+    if session.get('user_id'):
+        if save_type == 'search':
+            search = Search(
+                user_id=session.get('user_id'),
+                zipcode=save_data.get('zipcode'),
+                city=save_data.get('city'),
+                state=save_data.get('state'),
+                trans_type=save_data.get('trans_type'),
+                max_no_bed=save_data.get('max_no_bed'),
+                min_no_bed=save_data.get('min_no_bed'),
+                min_no_bath=save_data.get('min_no_bath'),
+                max_no_bath=save_data.get('max_no_bath'),
+                price_from=save_data.get('price_from'),
+                price_to=save_data.get('price_to'),
+                trans_date_from=save_data.get('trans_date_from'),
+                trans_date_to=save_data.get('trans_date_to'),
+                property_type=save_data.get('property_type')
+                )
+            db.session.add(search)
+            db.session.commit()
+
      # if save_type == 'search':
      #    if session.get('user_id'):
 
