@@ -1,10 +1,19 @@
+<!DOCTYPE html>
+
 {% extends 'base.html' %}
 {% block content %}
 
-Property ID: {{  property_id }}<br>
-Address: {{  address }}<br>
-City: {{  city }}<br>
-Zipcode: {{  zipcode_ten }}<br>
+
+
+<head>
+    <style type="text/css">
+        html, body { height: 100%; margin: 0; padding: 0; }
+        #map { height: 100%; }
+    </style>
+</head>
+<body>
+Property ID: {{  address_params.property_id }}<br>
+Address: {{  address_params.address }}<br>
 <br>
 <br>
 <br>
@@ -12,14 +21,20 @@ Zipcode: {{  zipcode_ten }}<br>
 Sales Details:
 
 <ul>
-    {% for sale in sale_history %}
-    <li>
-        Sale Date: {{  sale[0]  }}   Price: ${{  sale[1]  }}
-    </li>
-    {% endfor %}
-</ul>
+    {% if sale_history != 0 %}
+        {% for sale in sale_history %}
+        <li>
+            Sale Date: {{  sale[0]  }}   Price: ${{  sale[1]  }}
+        </li>
+        {% endfor %}
+    {% else %}
+        No sales data available for this address.
 
-<button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
+    {% endif %}
+</ul>
+<div>
+    <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
+</div>
 <script>
     "use strict";
 
@@ -35,4 +50,20 @@ Sales Details:
     $('#saved-property').on('click', handleSave);
 
 </script>
+<br>
+<br>
+<div id="map"></div>
+
+    <!-- Google maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+
+    <!-- what it looks like with a key -->
+<!-- <script async defer
+//       src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
+</script> -->
+
+    <script id="propertymap" addressValue="{{ address_params }}" src="../static/googlemaps.js"></script>
+</body>
 {% endblock %}
+
+
