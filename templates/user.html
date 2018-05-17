@@ -1,19 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h2>Users Page</h2>
+<h2>User Page</h2>
 
 <ul>
     Name: {{ user.fname }}<br>
     Zipcode: {{ user.zipcode }}<br>
     <br>
     Saved properties: <br>
+    <br>
+    
+    {% for property in properties %}
+        {{ property.address }}
+        <br>
+    {% endfor %}
+    <br>
+    Saved searches: <br>
+    <br>
     {% for search in searches %}
-    {{ search.address }}
+        The search id is: {{ search.search_id }}, Zipcode: {{ search.zipcode }}, City: {{ search.city}}, State: {{ search.state }}<br>
 
     {% endfor %}
-
-    Saved searches: <br>
     
 </ul>
 

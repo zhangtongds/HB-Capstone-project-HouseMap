@@ -110,12 +110,13 @@ def process_logout():
 def show_page(user_id):
     """Shows users page"""
     user = User.query.filter(User.user_id == user_id).first()
-    searches = Search.query.filter(User.user_id == user_id).all()
-    properties = Property.query.filter(User.user_id == user_id).all()
+    print user_id,"-------------"
+    searches = Search.query.filter(Search.user_id == user_id).all()
+    properties = Property.query.filter(Property.user_id == user_id).all()
     print searches, "!!!!!!!!"
     print properties, "**********"
 
-    return render_template("user.html", user=user,searches=searches, properties=properties)
+    return render_template("user.html", user=user, searches=searches, properties=properties)
 
 
 @app.route("/search")
@@ -235,7 +236,8 @@ def save_search():
                 trans_date_from=save_data.get('trans_date_from'),
                 trans_date_to=save_data.get('trans_date_to'),
                 property_type=save_data.get('property_type'),
-                saved_date=datetime.datetime.now()
+                saved_date=datetime.datetime.now(),
+                saved_by_user=True
                 )
 
             db.session.add(search)
@@ -253,7 +255,8 @@ def save_search():
                 longitude=float(save_data.get('longitude')),
                 no_of_beds=int(save_data.get('no_of_room')),
                 no_of_baths=float(save_data.get('no_of_bath')),
-                saved_date=datetime.datetime.now()
+                saved_date=datetime.datetime.now(),
+                saved_by_user=True
                 )
             db.session.add(_property)
             db.session.commit()
@@ -261,7 +264,10 @@ def save_search():
 
     return jsonify({'Result': save_data})
             
-     
+# @app.route("/map")
+# def save_search():
+
+#     return render_template("map.html")    
 
     
 

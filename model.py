@@ -94,7 +94,7 @@ class Property(db.Model):
     def __repr__(self):
         """Provide helpful representation when printed."""
 
-        return "<Property property_id={} self.user_id={} address={} latitude={} longitude={} zillow_url={} no_of_beds={} no_of_baths={} >".format(self.property_id, self.user_id, self.address, self.latitude, self.longitude, self.no_of_beds, self.no_of_baths)
+        return "<Property property_id={} self.user_id={} address={} latitude={} longitude={} zillow_url={} no_of_beds={} no_of_baths={} saved_date={} saved_by_user={}>".format(self.property_id, self.user_id, self.address, self.latitude, self.longitude, self.zillow_url, self.no_of_beds, self.no_of_baths, self.saved_date, self.saved_by_user)
 
 class Sale(db.Model):
     """Sale Details."""
