@@ -145,12 +145,14 @@ def get_user_input():
         longitude = utility.get_longitude_from_result(data_prop)
         no_beds = utility.get_no_beds_from_result(data_prop)
         no_baths = utility.get_no_beds_from_result(data_prop)
-        address_params = {"property_id": property_id,
-                                "address": full_address,
-                                "latitude": latitude,
-                                "longitude": longitude,
-                                "no_of_room": no_beds,
-                                "no_of_bath": no_baths}
+        address_params = {"property_id": str(property_id),
+                                "address": str(full_address),
+                                "latitude": str(latitude),
+                                "longitude": str(longitude),
+                                "no_of_room": str(no_beds),
+                                "no_of_bath": str(no_baths)} 
+        #address_params = jsonify(address_params)
+        print type(latitude)                      
         if data_sale['status']['code'] == 1:
             # Success without result
             return render_template("address-search-results.html",sale_history=0, address_params=address_params)    

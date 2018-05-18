@@ -11,6 +11,7 @@
         #map { height: 100%; }
     </style>
 </head>
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <body>
 Property ID: {{  address_params.property_id }}<br>
 Address: {{  address_params.address }}<br>
@@ -50,6 +51,8 @@ Sales Details:
     $('#saved-property').on('click', handleSave);
 
 </script>
+
+<input id="propertymap" value="{{ address_params }}" hidden>
 <br>
 <br>
 <div id="map"></div>
@@ -62,7 +65,7 @@ Sales Details:
 //       src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
 </script> -->
 
-    <script id="propertymap" addressValue="{{ address_params }}" src="../static/googlemaps.js"></script>
+    <script src="../static/googlemaps.js"></script>
 </body>
 {% endblock %}
 

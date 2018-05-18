@@ -6,15 +6,39 @@
 "use strict";
 
 
+let search_address = $("#propertymap").val();
+// let new_search_address;
 
+//$( document ).ready(function() {
+  
 
-console.log("Success2");
+// for (let letter of search_address) {
+//   if (letter == "'") {
+//     new_search_address += '"';
+//   }
+//   if (letter == "u") {
+//     continue;
+//   }
+//   else {
+//     new_search_address += letter;
+//   }
+// }
+//let search_address_new = json.dumps()
+let search_address_json = search_address.replace(/'/g, '"');
+console.log(search_address_json);
+let info = JSON.parse(search_address_json);
+let latitude = parseFloat(info.latitude);
+let longitude = parseFloat(info.longitude);
 
-let search_address = document.getElementById("propertymap").getAttribute("addressValue");
-console.log(search_address);
-console.log(search_address['latitude']);
-console.log(typeof search_address);
-let eastAustralia = {lat: Number(search_address.latitude), lng: Number(search_address.longitude)};
+//let j = JSON.parse('{{ search_address | tojson | safe}}');
+//console.log(new_search_address);
+//let j = JSON.parse("'" + search_address.slice(1,) + "'");
+
+console.log(latitude,longitude);
+
+ // });
+
+let eastAustralia = {lat: latitude, lng:longitude};
 
 let map = new google.maps.Map(document.querySelector('#map'), {
 	center: eastAustralia,
@@ -39,7 +63,7 @@ let map = new google.maps.Map(document.querySelector('#map'), {
 
 function addMarker() {
   let myImageURL = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
-  let nearSydney = new google.maps.LatLng(Number(search_address.latitude), Number(search_address.longitude));
+  let nearSydney = new google.maps.LatLng(latitude, longitude);
   let marker = new google.maps.Marker({
       position: nearSydney,
       map: map,
@@ -51,9 +75,9 @@ function addMarker() {
 
 let marker = addMarker();
 
-/////////////////
-// info window //
-/////////////////
+///////////////
+//info window //
+///////////////
 
 function addInfoWindow() {
 
