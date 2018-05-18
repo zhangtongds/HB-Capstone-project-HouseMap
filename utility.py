@@ -4,7 +4,10 @@ import requests
 def get_property_id(data):
     """Get propperty id from property API response."""
     
-    return data['property'][0]['identifier']['obPropId']
+    try:
+        return data['property'][0]['identifier']['obPropId']
+    except KeyError:
+        return None
 
 def get_ten_digits_zipcode(data):
     """Get ten digits zipcode from property API response. """

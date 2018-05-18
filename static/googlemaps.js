@@ -7,32 +7,11 @@
 
 
 let search_address = $("#propertymap").val();
-// let new_search_address;
-
-//$( document ).ready(function() {
-  
-
-// for (let letter of search_address) {
-//   if (letter == "'") {
-//     new_search_address += '"';
-//   }
-//   if (letter == "u") {
-//     continue;
-//   }
-//   else {
-//     new_search_address += letter;
-//   }
-// }
-//let search_address_new = json.dumps()
 let search_address_json = search_address.replace(/'/g, '"');
 console.log(search_address_json);
 let info = JSON.parse(search_address_json);
 let latitude = parseFloat(info.latitude);
 let longitude = parseFloat(info.longitude);
-
-//let j = JSON.parse('{{ search_address | tojson | safe}}');
-//console.log(new_search_address);
-//let j = JSON.parse("'" + search_address.slice(1,) + "'");
 
 console.log(latitude,longitude);
 
@@ -62,13 +41,16 @@ let map = new google.maps.Map(document.querySelector('#map'), {
 ////////////
 
 function addMarker() {
-  let myImageURL = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png';
+  let icon = {
+    url: 'http://remaxbeitshemesh.com/wp-content/themes/realty/lib/images/map-marker/map-marker-red-fat.png',
+    scaledSize: new google.maps.Size(18,30)
+    }
   let nearSydney = new google.maps.LatLng(latitude, longitude);
   let marker = new google.maps.Marker({
       position: nearSydney,
       map: map,
       title: 'Hover text',
-      icon: myImageURL
+      icon: icon
   });
   return marker;
 }

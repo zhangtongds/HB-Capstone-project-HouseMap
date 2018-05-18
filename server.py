@@ -151,7 +151,7 @@ def get_user_input():
                                 "longitude": str(longitude),
                                 "no_of_room": str(no_beds),
                                 "no_of_bath": str(no_baths)} 
-        #address_params = jsonify(address_params)
+        print address_params
         print type(latitude)                      
         if data_sale['status']['code'] == 1:
             # Success without result
