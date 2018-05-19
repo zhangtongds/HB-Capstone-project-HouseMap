@@ -263,10 +263,30 @@ def save_search():
 
     return jsonify({'Result': save_data})
             
-# @app.route("/map")
-# def save_search():
+@app.route('/melon-types.json')
+def melon_types_data():
+    """Return data about Melon Sales."""
 
-#     return render_template("map.html")    
+    data_dict = {
+                "labels": [
+                    "Christmas Melon",
+                    "Crenshaw",
+                ],
+                "datasets": [
+                    {
+                        "data": [300, 50],
+                        "backgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ],
+                        "hoverBackgroundColor": [
+                            "#FF6384",
+                            "#36A2EB",
+                        ]
+                    }]
+            }
+
+    return jsonify(data_dict)
 
     
 

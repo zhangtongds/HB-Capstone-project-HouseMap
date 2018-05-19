@@ -17,10 +17,10 @@ console.log(latitude,longitude);
 
  // });
 
-let eastAustralia = {lat: latitude, lng:longitude};
+let center = {lat: latitude, lng:longitude};
 
 let map = new google.maps.Map(document.querySelector('#map'), {
-	center: eastAustralia,
+	center: center,
 	zoom: 8,
 // Note: the following are marked the opposite of the default setting
 // (that is, they're marked "false" if they're true by
@@ -43,7 +43,7 @@ let map = new google.maps.Map(document.querySelector('#map'), {
 function addMarker() {
   let icon = {
     url: 'http://remaxbeitshemesh.com/wp-content/themes/realty/lib/images/map-marker/map-marker-red-fat.png',
-    scaledSize: new google.maps.Size(18,30)
+    scaledSize: new google.maps.Size(26,38)
     }
   let nearSydney = new google.maps.LatLng(latitude, longitude);
   let marker = new google.maps.Marker({
@@ -62,9 +62,12 @@ let marker = addMarker();
 ///////////////
 
 function addInfoWindow() {
-
+  let noBeds = info.no_of_room
+  let noBaths = info.no_of_bath
   let contentString = '<div id="content">' +
-    '<h1>All my custom content</h1>' +
+    '<h2>Property Details:</h2>' +
+    "Number of beds: " + noBeds + '<br>' +
+    "Number of baths: " + noBaths +
     '</div>';
 
   let infoWindow = new google.maps.InfoWindow({
@@ -77,7 +80,7 @@ function addInfoWindow() {
   });
 }
 
-// addInfoWindow()
+addInfoWindow()
 
 
 ////////////

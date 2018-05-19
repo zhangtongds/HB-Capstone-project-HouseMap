@@ -84,7 +84,7 @@ def get_area_sale_trend(data):
 def get_full_address_from_result(data):
     """Get full result including address, city, state, zipcode from result data."""
 
-    return data['property'][0]['address']['line1'] + data['property'][0]['address']['line2']
+    return data['property'][0]['address']['line1'] + ", " + data['property'][0]['address']['line2']
 
 def get_latitude_from_result(data):
     """Get latitude from result data."""

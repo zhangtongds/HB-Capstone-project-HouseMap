@@ -12,7 +12,9 @@
     </style>
 </head>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src= "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
 <body>
+
 Property ID: {{  address_params.property_id }}<br>
 Address: {{  address_params.address }}<br>
 <br>
@@ -33,6 +35,10 @@ Sales Details:
 
     {% endif %}
 </ul>
+<div class="melon-chart">
+  <canvas id="donutChart"></canvas>
+  <div id="donutLegend" class="chart-legend"></div>
+</div>
 <div>
     <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
 </div>
@@ -66,6 +72,8 @@ Sales Details:
 </script> -->
 
     <script src="../static/googlemaps.js"></script>
+    <script src="../static/sales_trend_chart.js"></script>
+
 </body>
 {% endblock %}
 
