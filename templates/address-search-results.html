@@ -22,22 +22,55 @@ Address: {{  address_params.address }}<br>
 <br>
 <br>
 Sales Details:
+<div id='sale_history' value = "{{ sale_history }}">
+    <!-- <a href="{{ url_for('sales_trend_data', sales_trend=sale_history) }}">Send my_value</a> -->
 
-<ul>
-    {% if sale_history != 0 %}
-        {% for sale in sale_history %}
-        <li>
-            Sale Date: {{  sale[0]  }}   Price: ${{  sale[1]  }}
-        </li>
-        {% endfor %}
-    {% else %}
-        No sales data available for this address.
+        <ul>
+            {% if sale_history != 0 %}
+                {% for sale in sale_history %}
+                <li>
+                    Sale Date: {{  sale[0]  }}   Price: ${{  sale[1]  }}
+                </li>
+                {% endfor %}
+            {% else %}
+                No sales data available for this address.
 
-    {% endif %}
-</ul>
+            {% endif %}
+        </ul>
+</div>
+<script>
+    "use strict";
+//     function loadTrends() {
+//         // $(document).ready(
+//         let sales_trend_data = document.getElementById("#sale_history");
+//         console.log("hello");
+//         console.log(sales_trend_data);
+   
+//         let data = {"sales_data" : sales_trend_data}
+//         $.get('/sales-trend.json', 
+//             data)
+//         function() {
+//         console.log("success")
+//     };
+// }
+window.onload = function (){
+   let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
+    console.log(sales_trend_data);
+    console.log("hello"); 
+    let data = {"sales_data" : sales_trend_data}
+        $.get('/sales-trend.json', 
+            data)
+        
+        console.log("success")
+}
+
+ 
+</script>
+
 <div class="melon-chart">
-  <canvas id="donutChart"></canvas>
-  <div id="donutLegend" class="chart-legend"></div>
+    <!-- <a href="/sales-trend.json"></a> -->
+  <canvas id="lineChart"></canvas>
+  <div id="lineLegend" class="chart-legend"></div>
 </div>
 <div>
     <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
@@ -59,6 +92,7 @@ Sales Details:
 </script>
 
 <input id="propertymap" value="{{ address_params }}" hidden>
+<input id="saleshistory" value="{{ sale_history }}" hidden>
 <br>
 <br>
 <div id="map"></div>

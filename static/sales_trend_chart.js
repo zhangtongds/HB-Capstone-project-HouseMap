@@ -1,12 +1,21 @@
-let options = { responsive: true };
+let salesHistory = $("#saleshistory").val();
+// console.log(salesHistory)
+// let sale_trend_json = salesHistory.replace(/'/g, '"');
+// let sales = JSON.parse(sale_trend_json);
+// console.log(sales);
 
-let ctx_donut = $("#donutChart").get(0).getContext("2d");
+// let options = { responsive: true };
 
-$.get("/melon-types.json", function (data) {
-    let myDonutChart = new Chart(ctx_donut, {
-                                            type: 'doughnut',
-                                            data: data,
-                                            options: options
-                                          });
-    $('#donutLegend').html(myDonutChart.generateLegend());
-});
+
+
+// 
+// let ctx = $("#lineChart").get(0).getContext("2d");
+
+
+// let myLineChart = new Chart(ctx, {
+//                                         type: 'line',
+//                                         data: salesHistory,
+//                                         options: options
+//                                     });
+// $('#lineLegend').html(myDonutChart.generateLegend());
+

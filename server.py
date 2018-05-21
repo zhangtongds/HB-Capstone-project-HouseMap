@@ -110,11 +110,11 @@ def process_logout():
 def show_page(user_id):
     """Shows users page"""
     user = User.query.filter(User.user_id == user_id).first()
-    print user_id,"-------------"
+    # print user_id,"-------------"
     searches = Search.query.filter(Search.user_id == user_id).all()
     properties = Property.query.filter(Property.user_id == user_id).all()
-    print searches, "!!!!!!!!"
-    print properties, "**********"
+    # print searches, "!!!!!!!!"
+    # print properties, "**********"
 
     return render_template("user.html", user=user, searches=searches, properties=properties)
 
@@ -134,7 +134,7 @@ def get_user_input():
 
         property_url = "property/detail?"
         data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
-        pprint.pprint(data_prop)
+        # pprint.pprint(data_prop)
         sale_url = "saleshistory/detail?"
 
         data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
@@ -151,13 +151,13 @@ def get_user_input():
                                 "longitude": str(longitude),
                                 "no_of_room": str(no_beds),
                                 "no_of_bath": str(no_baths)} 
-        print address_params
-        print type(latitude)                      
+                           
         if data_sale['status']['code'] == 1:
             # Success without result
             return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
         else:
             sale_history = utility.get_sale_history(data_sale)
+            # print sale_history, "==========="
             return render_template("address-search-results.html", sale_history=sale_history, address_params=address_params)
 
     else:
@@ -263,30 +263,35 @@ def save_search():
 
     return jsonify({'Result': save_data})
             
-@app.route('/melon-types.json')
-def melon_types_data():
-    """Return data about Melon Sales."""
+@app.route('/sales-trend.json')
+def sales_trend_data():
+    """Return data about sales history."""
+    sales_history = request.args.get('sales_data')
 
-    data_dict = {
-                "labels": [
-                    "Christmas Melon",
-                    "Crenshaw",
-                ],
-                "datasets": [
-                    {
-                        "data": [300, 50],
-                        "backgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ],
-                        "hoverBackgroundColor": [
-                            "#FF6384",
-                            "#36A2EB",
-                        ]
-                    }]
-            }
+    # prop_map = request.args.get('propertymap')
+    # print prop_map
 
-    return jsonify(data_dict)
+    print sales_history, "******"
+    # data_dict = {
+    #             "labels": [
+    #                 "Christmas Melon",
+    #                 "Crenshaw",
+    #             ],
+    #             "datasets": [
+    #                 {
+    #                     "data": [300, 50],
+    #                     "backgroundColor": [
+    #                         "#FF6384",
+    #                         "#36A2EB",
+    #                     ],
+    #                     "hoverBackgroundColor": [
+    #                         "#FF6384",
+    #                         "#36A2EB",
+    #                     ]
+    #                 }]
+    #         }
+
+    return jsonify({"Result":sales_history})
 
     
 
