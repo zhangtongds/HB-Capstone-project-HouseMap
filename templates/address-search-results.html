@@ -66,8 +66,8 @@ Sales Details:
 
  
 </script>
-
-<div class="melon-chart">
+{% if sale_history != 0 %}
+<div class="line-chart">
     <!-- <a href="/sales-trend.json"></a> -->
   <canvas id="lineChart"></canvas>
   <div id="lineLegend" class="chart-legend"></div>
@@ -75,6 +75,7 @@ Sales Details:
 <div>
     <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
 </div>
+{% endif %}
 <script>
     "use strict";
 

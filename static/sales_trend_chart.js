@@ -3,7 +3,23 @@
 
 // console.log(sales);
 
-let options = { responsive: true };
+let options = { responsive: true,
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                callback: function(label, index, labels) {
+                                    return "$" + parseInt(label/1000)+'k';
+                                }
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '1k = 1000'
+                            }
+                        }
+                    ]
+                }
+ };
 
 
 
