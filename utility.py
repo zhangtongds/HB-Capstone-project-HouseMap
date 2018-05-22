@@ -22,9 +22,9 @@ def get_five_digits_zipcode(data):
 def get_sale_history(data):
     """Get a list of sales date and amount tuples from sales API response"""
     
-    sale_history = [] # creat a list of sales history to pass to the front end.
+    sale_history = {} # creat a list of sales history to pass to the front end.
     for sale in data['property'][0]['salehistory']:
-        sale_history.append((sale['amount']['salerecdate'], sale['amount']['saleamt']))
+        sale_history[sale['amount']['salerecdate']] = sale['amount']['saleamt']
     return sale_history
 
 def get_result_from_api(URL, endpoint, headers, search_params):

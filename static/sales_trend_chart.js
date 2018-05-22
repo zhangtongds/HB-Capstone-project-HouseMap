@@ -1,21 +1,28 @@
-let salesHistory = $("#saleshistory").val();
+// let salesHistory = $("#saleshistory").val();
 // console.log(salesHistory)
-// let sale_trend_json = salesHistory.replace(/'/g, '"');
-// let sales = JSON.parse(sale_trend_json);
+
 // console.log(sales);
 
-// let options = { responsive: true };
+let options = { responsive: true };
 
 
 
 // 
-// let ctx = $("#lineChart").get(0).getContext("2d");
 
 
-// let myLineChart = new Chart(ctx, {
-//                                         type: 'line',
-//                                         data: salesHistory,
-//                                         options: options
-//                                     });
-// $('#lineLegend').html(myDonutChart.generateLegend());
+let ctx = $("#lineChart").get(0).getContext("2d");
+
+let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
+ $.get("/sales-trend.json", 
+    {"sales_data" : sales_trend_data},
+    function (data, status) {
+    console.log("got data")
+let myLineChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: data,
+                                        options: options
+                                    })
+$('#lineLegend').html(myLineChart.generateLegend());
+
+});
 

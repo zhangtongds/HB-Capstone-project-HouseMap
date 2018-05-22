@@ -138,6 +138,7 @@ def get_user_input():
         sale_url = "saleshistory/detail?"
 
         data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
+
         property_id = utility.get_property_id(data_prop)
         zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
         full_address = utility.get_full_address_from_result(data_prop)
@@ -157,7 +158,8 @@ def get_user_input():
             return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
         else:
             sale_history = utility.get_sale_history(data_sale)
-            # print sale_history, "==========="
+
+            print sale_history, "==========="
             return render_template("address-search-results.html", sale_history=sale_history, address_params=address_params)
 
     else:
@@ -267,34 +269,47 @@ def save_search():
 def sales_trend_data():
     """Return data about sales history."""
     sales_history = request.args.get('sales_data')
-
-    # prop_map = request.args.get('propertymap')
+    print sales_history
+    print type(sales_history),"***********"
+    sales_history = ast.literal_eval(sales_history)
+    print "debug"
+    print type(sales_history)
+    prop_map = request.args.get('propertymap')
     # print prop_map
-
-    print sales_history, "******"
-    # data_dict = {
-    #             "labels": [
-    #                 "Christmas Melon",
-    #                 "Crenshaw",
-    #             ],
-    #             "datasets": [
-    #                 {
-    #                     "data": [300, 50],
-    #                     "backgroundColor": [
-    #                         "#FF6384",
-    #                         "#36A2EB",
-    #                     ],
-    #                     "hoverBackgroundColor": [
-    #                         "#FF6384",
-    #                         "#36A2EB",
-    #                     ]
-    #                 }]
-    #         }
-
-    return jsonify({"Result":sales_history})
-
-    
-
+    data = []
+    labels = []
+    for i, record in sales_history.items():
+        #print record[0], record[1]
+        labels.append(i)
+        data.append(record)
+    print data, labels
+    data_dict = {
+        "labels": labels,
+        "datasets": [
+            {
+                "label": "Cantaloupe",
+                "fill": True,
+                "lineTension": 0.5,
+                "backgroundColor": "rgba(151,187,205,0.2)",
+                "borderColor": "rgba(151,187,205,1)",
+                "borderCapStyle": 'butt',
+                "borderDash": [],
+                "borderDashOffset": 0.0,
+                "borderJoinStyle": 'miter',
+                "pointBorderColor": "rgba(151,187,205,1)",
+                "pointBackgroundColor": "#fff",
+                "pointBorderWidth": 1,
+                "pointHoverRadius": 5,
+                "pointHoverBackgroundColor": "#fff",
+                "pointHoverBorderColor": "rgba(151,187,205,1)",
+                "pointHoverBorderWidth": 2,
+                "pointHitRadius": 10,
+                "data": data,
+                "spanGaps": False}
+        ]
+    }
+    print "sales_trend_data"
+    return jsonify(data_dict)
 
 if __name__ == "__main__":
 

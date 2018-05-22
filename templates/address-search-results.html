@@ -27,9 +27,9 @@ Sales Details:
 
         <ul>
             {% if sale_history != 0 %}
-                {% for sale in sale_history %}
+                {% for i,sale in sale_history.items() %}
                 <li>
-                    Sale Date: {{  sale[0]  }}   Price: ${{  sale[1]  }}
+                    Sale Date: {{  i  }}   Price: ${{  sale  }}
                 </li>
                 {% endfor %}
             {% else %}
@@ -53,16 +53,16 @@ Sales Details:
 //         console.log("success")
 //     };
 // }
-window.onload = function (){
-   let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
-    console.log(sales_trend_data);
-    console.log("hello"); 
-    let data = {"sales_data" : sales_trend_data}
-        $.get('/sales-trend.json', 
-            data)
+// window.onload = function (){
+//    let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
+//     console.log(sales_trend_data);
+//     // console.log("hello"); 
+//     let data = {"sales_data" : sales_trend_data}
+//         $.get('/sales-trend.json', 
+//             data)
         
-        console.log("success")
-}
+//         console.log("success")
+// }
 
  
 </script>
