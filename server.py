@@ -37,7 +37,7 @@ def homepage():
     field_map = {
         'zipcode': ['zipcode'],
         'address': ['address', 'city', 'state'],
-        'city': ['city', 'state']
+        'city': ['city']
     }
     allowed_fields = field_map[search_type]
     return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
@@ -192,17 +192,16 @@ def get_user_input():
                 trend_data = trend_response.json()
                 # print pprint.pprint(trend_data)
                 area_trend = utility.get_area_sale_trend(trend_data)
-                return render_template("other-search-results.html", median_price=median_price,
+                return render_template("region-search-results.html", median_price=median_price,
                                                                     no_results=no_results,
                                                                     area=area,
                                                                     percent_25_price=percent_25_price,
                                                                     percent_75_price=percent_75_price,
                                                                     trend_data=trend_data,
                                                                     area_trend=area_trend,
-                                                                    search_params=search_params
-                                                                    )
+                                                                    search_params=search_params)
 
-            return render_template("other-search-results.html", median_price=median_price,
+            return render_template("region-search-results.html", median_price=median_price,
                                                                 no_results=no_results,
                                                                 area=area,
                                                                 percent_25_price=percent_25_price,
@@ -210,7 +209,7 @@ def get_user_input():
                                                                 search_params=search_params
                                                                 )
         else:
-            return render_template("other-search-results.html", no_results=0)
+            return render_template("region-search-results.html", no_results=0)
         # return redirect("/")
         
 
@@ -265,9 +264,10 @@ def save_search():
 
     return jsonify({'Result': save_data})
             
-@app.route('/sales-trend.json')
-def sales_trend_data():
-    """Return data about sales history."""
+@app.route('/address-sales-history.json')
+def address_sales_history():
+    """Return data about address sales history."""
+
     sales_history = request.args.get('sales_data')
     sales_history = ast.literal_eval(sales_history)
     prop_map = request.args.get('propertymap')
@@ -300,6 +300,85 @@ def sales_trend_data():
                 "pointHitRadius": 10,
                 "data": data,
                 "spanGaps": False}
+        ]
+    }
+    return jsonify(data_dict)
+
+@app.route('/region-sales-history.json')
+def region_sales_history():
+    """Return data about region sales history."""
+
+    region_sales = request.args.get('region_history_data')
+    region_sales = ast.literal_eval(region_sales)
+
+    # print region_sales
+    labels = []
+    data_avg = []
+    data_median = []
+    data_counts = []
+    for key in sorted(region_sales.keys()):
+        labels.append(key)
+        data_avg.append(region_sales[key][0])
+        data_counts.append(region_sales[key][1])
+        data_median.append(region_sales[key][2])
+    print labels,data_avg, data_median, data_counts
+
+    data_dict = {
+        "labels": labels,
+        "datasets": [
+            {
+                "label": "Average Price",
+                "fill": False,
+                "lineTension": 0.5,
+                "backgroundColor": "rgba(151,187,205,0.2)",
+                "borderColor": "rgba(151,187,205,1)",
+                "borderCapStyle": 'butt',
+                "borderDash": [],
+                "borderDashOffset": 0.0,
+                "borderJoinStyle": 'miter',
+                "pointBorderColor": "rgba(151,187,205,1)",
+                "pointBackgroundColor": "#fff",
+                "pointBorderWidth": 1,
+                "pointHoverRadius": 5,
+                "pointHoverBackgroundColor": "#fff",
+                "pointHoverBorderColor": "rgba(151,187,205,1)",
+                "pointHoverBorderWidth": 2,
+                "pointHitRadius": 10,
+                "data": data_avg,
+                "spanGaps": False},
+            {
+                "label": "Median Price",
+                "fill": False,
+                "lineTension": 0.5,
+                "backgroundColor": "rgba(220,220,220,0.2)",
+                "borderColor": "rgb(255, 159, 64)",
+                "borderCapStyle": 'butt',
+                "borderDash": [],
+                "borderDashOffset": 0.0,
+                "borderJoinStyle": 'miter',
+                "pointBorderColor": "rgb(255, 159, 64)",
+                "pointBackgroundColor": "#fff",
+                "pointBorderWidth": 1,
+                "pointHoverRadius": 5,
+                "pointHoverBackgroundColor": "#fff",
+                "pointHoverBorderColor": "rgba(220,220,220,1)",
+                "pointHoverBorderWidth": 2,
+                "pointRadius": 3,
+                "pointHitRadius": 10,
+                "data": data_median,
+                "spanGaps": False}
+                # ,
+                # {
+                #   "label": "bar",
+                #   "backgroundColor": "#e91e63",
+                #   "borderColor": "#e91e63",
+                #   "yAxisID": "axis4",
+                #   "borderWidth": 1,
+                #   "fill": True,
+                #   "xAxisID": "axis-bar",
+                #   "data": data_counts
+                # }
+
         ]
     }
     return jsonify(data_dict)

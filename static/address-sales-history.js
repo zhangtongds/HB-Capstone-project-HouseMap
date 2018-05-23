@@ -29,7 +29,7 @@ let options = { responsive: true,
 let ctx = $("#lineChart").get(0).getContext("2d");
 
 let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
- $.get("/sales-trend.json", 
+ $.get("/address-sales-history.json", 
     {"sales_data" : sales_trend_data},
     function (data, status) {
     console.log("got data")

@@ -23,8 +23,7 @@ Address: {{  address_params.address }}<br>
 <br>
 Sales Details:
 <div id='sale_history' value = "{{ sale_history }}">
-    <!-- <a href="{{ url_for('sales_trend_data', sales_trend=sale_history) }}">Send my_value</a> -->
-
+  
         <ul>
             {% if sale_history != 0 %}
                 {% for i,sale in sale_history.items() %}
@@ -38,44 +37,17 @@ Sales Details:
             {% endif %}
         </ul>
 </div>
-<script>
-    "use strict";
-//     function loadTrends() {
-//         // $(document).ready(
-//         let sales_trend_data = document.getElementById("#sale_history");
-//         console.log("hello");
-//         console.log(sales_trend_data);
-   
-//         let data = {"sales_data" : sales_trend_data}
-//         $.get('/sales-trend.json', 
-//             data)
-//         function() {
-//         console.log("success")
-//     };
-// }
-// window.onload = function (){
-//    let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
-//     console.log(sales_trend_data);
-//     // console.log("hello"); 
-//     let data = {"sales_data" : sales_trend_data}
-//         $.get('/sales-trend.json', 
-//             data)
-        
-//         console.log("success")
-// }
-
- 
-</script>
 {% if sale_history != 0 %}
 <div class="line-chart">
-    <!-- <a href="/sales-trend.json"></a> -->
   <canvas id="lineChart"></canvas>
   <div id="lineLegend" class="chart-legend"></div>
 </div>
+{% endif %}
+
 <div>
     <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
 </div>
-{% endif %}
+
 <script>
     "use strict";
 
@@ -107,8 +79,8 @@ Sales Details:
 </script> -->
 
     <script src="../static/googlemaps.js"></script>
-    <script src="../static/sales_trend_chart.js"></script>
-
+    <script src="../static/address-sales-history.js"></script>
+    
 </body>
 {% endblock %}
 

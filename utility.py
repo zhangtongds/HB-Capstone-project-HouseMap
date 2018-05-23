@@ -71,13 +71,14 @@ def get_area_sale_list(data):
 def get_area_sale_trend(data):
     """Getting sales trend for a zipcode."""
     
-    area_trend = []
+    area_trend = {}
     for item in data['salestrends']:
         year = item['daterange']['end']
         avg_price = item['SalesTrend']['avgsaleprice']
         home_count = item['SalesTrend']['homesalecount']
         med_price = item['SalesTrend']['medsaleprice']
-        area_trend.append([year, avg_price, home_count, med_price])
+        
+        area_trend[year] = [avg_price, home_count, med_price]
 
     return area_trend
 

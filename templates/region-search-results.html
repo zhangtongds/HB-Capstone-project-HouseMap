@@ -15,20 +15,31 @@
     <br>
     <br>
     <br>
+    {% if area_trend %}
+    {% for key, value in area_trend.items() %}
 
-    {% for year, avgPrice, homeCount, medPrice in area_trend %}
-
-        Year {{ year }}, average price {{ avgPrice }}, home count {{ homeCount }}, median price {{ medPrice }}.<br>
+        Year {{ key }}, average price {{ value[0] }}, home count {{ value[1] }}, median price {{ value[2] }}.<br>
         <br>
     {% endfor %}
+    {% endif %}
     <button type="button", id='saved-search', value = "{{ search_params }}" > Save this search</button>
 {% else %}
 
     Sorry, no results, please search again.<br>
 {% endif %}
 
+<input id="region_sales" value="{{ area_trend }}" hidden>
 
+{% if area_trend != 0 %}
+<div class="line-chart">
+  <canvas id="lineChart"></canvas>
+  <div id="lineLegend" class="chart-legend"></div>
+</div>
 
+{% endif %}
+<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.js"></script>
 <script>
     "use strict";
 
@@ -45,4 +56,6 @@
     $('#saved-search').on('click', handleSave);
 
 </script>
+<script src="../static/region-sales-history.js"></script>
+
 {% endblock %}
