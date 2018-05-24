@@ -65,15 +65,5 @@ let myLineChart = new Chart(ctx, {
                                         //                         }
                                         //                         }]
                                         //             }
-                                    }
-    //                                 ,
-    //                                 {
-      
-    //   "type": "bar",
-      
-      
-    // }
-                                    )
-$('#lineLegend').html(myLineChart.generateLegend());
-
+                                    })
 });

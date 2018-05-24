@@ -122,46 +122,48 @@ def show_page(user_id):
 @app.route("/search")
 def get_user_input():
     """Get user input information, pass to api and get the results."""
+    try:
+        search_type = session['search_type']
+        if search_type == 'address':
+            address = request.args.get("address")
+            city = request.args.get("city")
+            state = request.args.get("state")
 
-    search_type = session['search_type']
-    if search_type == 'address':
-        address = request.args.get("address")
-        city = request.args.get("city")
-        state = request.args.get("state")
+            address1 = address.replace(" ", "%20")
+            address2 = city + "%2C%20" + state
 
-        address1 = address.replace(" ", "%20")
-        address2 = city + "%2C%20" + state
+            property_url = "property/detail?"
+            data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
+            # pprint.pprint(data_prop)
+            sale_url = "saleshistory/detail?"
 
-        property_url = "property/detail?"
-        data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
-        # pprint.pprint(data_prop)
-        sale_url = "saleshistory/detail?"
+            data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
 
-        data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
-
-        property_id = utility.get_property_id(data_prop)
-        zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
-        full_address = utility.get_full_address_from_result(data_prop)
-        latitude = utility.get_latitude_from_result(data_prop)
-        longitude = utility.get_longitude_from_result(data_prop)
-        no_beds = utility.get_no_beds_from_result(data_prop)
-        no_baths = utility.get_no_beds_from_result(data_prop)
-        address_params = {"property_id": str(property_id),
-                                "address": str(full_address),
-                                "latitude": str(latitude),
-                                "longitude": str(longitude),
-                                "no_of_room": str(no_beds),
-                                "no_of_bath": str(no_baths)} 
-                           
-        if data_sale['status']['code'] == 1:
-            # Success without result
-            return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
-        else:
-            sale_history = utility.get_sale_history(data_sale)
-            if sale_history.values()[0] != 0:
-                return render_template("address-search-results.html", sale_history=sale_history, address_params=address_params)
+            property_id = utility.get_property_id(data_prop)
+            zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
+            full_address = utility.get_full_address_from_result(data_prop)
+            latitude = utility.get_latitude_from_result(data_prop)
+            longitude = utility.get_longitude_from_result(data_prop)
+            no_beds = utility.get_no_beds_from_result(data_prop)
+            no_baths = utility.get_no_beds_from_result(data_prop)
+            address_params = {"property_id": str(property_id),
+                                    "address": str(full_address),
+                                    "latitude": str(latitude),
+                                    "longitude": str(longitude),
+                                    "no_of_room": str(no_beds),
+                                    "no_of_bath": str(no_baths)} 
+                               
+            if data_sale['status']['code'] == 1:
+                # Success without result
+                return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
             else:
-                return render_template("address-search-results.html",sale_history=0, address_params=address_params)
+                sale_history = utility.get_sale_history(data_sale)
+                if sale_history.values()[0] != 0:
+                    return render_template("address-search-results.html", sale_history=sale_history, address_params=address_params)
+                else:
+                    return render_template("address-search-results.html",sale_history=0, address_params=address_params)
+    except IndexError:
+        return render_template("no-result.html")
     else:
         params_key = ['zipcode', 'city', 'property_type', 'max_no_bed', 'min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
         sale_url = "sale/snapshot?pageSize=200000&"
