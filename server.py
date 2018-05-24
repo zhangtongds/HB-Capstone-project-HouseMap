@@ -327,10 +327,11 @@ def region_sales_history():
         "labels": labels,
         "datasets": [
             {
+                "type": "line",
                 "label": "Average Price",
                 "fill": False,
                 "lineTension": 0.5,
-                "backgroundColor": "rgba(151,187,205,0.2)",
+                "backgroundColor": "rgba(151,187,205,1)",
                 "borderColor": "rgba(151,187,205,1)",
                 "borderCapStyle": 'butt',
                 "borderDash": [],
@@ -345,12 +346,15 @@ def region_sales_history():
                 "pointHoverBorderWidth": 2,
                 "pointHitRadius": 10,
                 "data": data_avg,
-                "spanGaps": False},
+                "spanGaps": False,
+                "yAxisID": "y-axis-1"
+                },
             {
+                "type": "line",
                 "label": "Median Price",
                 "fill": False,
                 "lineTension": 0.5,
-                "backgroundColor": "rgba(220,220,220,0.2)",
+                "backgroundColor": "rgb(255, 159, 64)",
                 "borderColor": "rgb(255, 159, 64)",
                 "borderCapStyle": 'butt',
                 "borderDash": [],
@@ -366,18 +370,20 @@ def region_sales_history():
                 "pointRadius": 3,
                 "pointHitRadius": 10,
                 "data": data_median,
-                "spanGaps": False}
-                # ,
-                # {
-                #   "label": "bar",
-                #   "backgroundColor": "#e91e63",
-                #   "borderColor": "#e91e63",
-                #   "yAxisID": "axis4",
-                #   "borderWidth": 1,
-                #   "fill": True,
-                #   "xAxisID": "axis-bar",
-                #   "data": data_counts
-                # }
+                "spanGaps": False,
+                "yAxisID": "y-axis-1"
+                },
+            
+            {
+                "type": "bar",
+                "label": "Count",
+                "fill": True,
+                "backgroundColor": "#c45850",
+                "borderColor": "#c45850",
+                "data": data_counts,
+                "yAxisID": "y-axis-2"
+                }
+            
 
         ]
     }
