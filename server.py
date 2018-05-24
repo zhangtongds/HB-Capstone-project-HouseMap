@@ -37,7 +37,7 @@ def homepage():
     field_map = {
         'zipcode': ['zipcode'],
         'address': ['address', 'city', 'state'],
-        'city': ['city']
+        'city': ['city', 'state']
     }
     allowed_fields = field_map[search_type]
     return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
@@ -128,7 +128,7 @@ def get_user_input():
             address = request.args.get("address")
             city = request.args.get("city")
             state = request.args.get("state")
-
+        # print state, type(state), "********"
             address1 = address.replace(" ", "%20")
             address2 = city + "%2C%20" + state
 
@@ -214,7 +214,7 @@ def get_user_input():
                                                                 )
         else:
             return render_template("region-search-results.html", no_results=0)
-        # return redirect("/")
+    # return redirect("/")
         
 
 @app.route("/search", methods=["POST"])
