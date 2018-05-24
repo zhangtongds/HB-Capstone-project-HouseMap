@@ -158,10 +158,12 @@ def get_user_input():
                 return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
             else:
                 sale_history = utility.get_sale_history(data_sale)
-                if sale_history.values()[0] != 0:
-                    return render_template("address-search-results.html", sale_history=sale_history, address_params=address_params)
-                else:
-                    return render_template("address-search-results.html",sale_history=0, address_params=address_params)
+                for key, value in sale_history.items():
+                    if value == 0:
+                        del sale_history[key]
+                return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
+                    # else:
+                    #     return render_template("address-search-results.html",sale_history=0, address_params=address_params)
     except IndexError:
         return render_template("no-result.html")
     else:
