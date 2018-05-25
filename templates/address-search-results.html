@@ -17,13 +17,19 @@
 
 Property ID: {{  address_params.property_id }}<br>
 Address: {{  address_params.address }}<br>
+County: {{ address_params.county  }}<br>
+Wall Type: {{ address_params.wall_type }}<br>
+Building Type: {{ address_params.bldg_type  }}<br>
+Lot Size: {{ address_params.lot_size }}<br>
+Year Built: {{ address_params.year_built }}<br>
+Last Modified: {{ address_params.last_modified }}<br>
 <br>
 <br>
 <br>
 <br>
 Sales Details:
 <div id='sale_history' value = "{{ sale_history }}">
-  
+  <!-- 
         <ul>
             {% if sale_history != 0 %}
                 {% for i,sale in sale_history.items() %}
@@ -35,7 +41,7 @@ Sales Details:
                 No sales data available for this address.
 
             {% endif %}
-        </ul>
+        </ul> -->
 </div>
 {% if sale_history != 0 %}
 <div class="line-chart">

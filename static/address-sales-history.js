@@ -34,7 +34,7 @@ let sales_trend_data = document.getElementById("sale_history").getAttribute("val
     function (data, status) {
     console.log("got data")
 let myLineChart = new Chart(ctx, {
-                                        type: 'line',
+                                        type: 'bar',
                                         data: data,
                                         options: options
                                     })

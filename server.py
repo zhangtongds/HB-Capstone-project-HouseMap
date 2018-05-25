@@ -110,11 +110,8 @@ def process_logout():
 def show_page(user_id):
     """Shows users page"""
     user = User.query.filter(User.user_id == user_id).first()
-    # print user_id,"-------------"
     searches = Search.query.filter(Search.user_id == user_id).all()
     properties = Property.query.filter(Property.user_id == user_id).all()
-    # print searches, "!!!!!!!!"
-    # print properties, "**********"
 
     return render_template("user.html", user=user, searches=searches, properties=properties)
 
@@ -128,13 +125,12 @@ def get_user_input():
             address = request.args.get("address")
             city = request.args.get("city")
             state = request.args.get("state")
-        # print state, type(state), "********"
             address1 = address.replace(" ", "%20")
             address2 = city + "%2C%20" + state
 
             property_url = "property/detail?"
             data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
-            # pprint.pprint(data_prop)
+            pprint.pprint(data_prop)
             sale_url = "saleshistory/detail?"
 
             data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
@@ -146,22 +142,37 @@ def get_user_input():
             longitude = utility.get_longitude_from_result(data_prop)
             no_beds = utility.get_no_beds_from_result(data_prop)
             no_baths = utility.get_no_beds_from_result(data_prop)
+
+            county = utility.get_county(data_prop)
+            wall_type = utility.get_wall_type(data_prop)
+            bldg_type = utility.get_bdlg_type(data_prop)
+            lot_size = utility.get_lot_size(data_prop)
+            year_built = utility.get_year_built(data_prop)
+            last_modified = utility.get_last_modified(data_prop)
             address_params = {"property_id": str(property_id),
                                     "address": str(full_address),
                                     "latitude": str(latitude),
                                     "longitude": str(longitude),
                                     "no_of_room": str(no_beds),
-                                    "no_of_bath": str(no_baths)} 
+                                    "no_of_bath": str(no_baths),
+                                    "county": str(county),
+                                    "wall_type": str(wall_type),
+                                    "bldg_type": str(bldg_type),
+                                    "lot_size": lot_size,
+                                    "year_built": str(year_built),
+                                    "last_modified": str(last_modified)
+                                    } 
                                
             if data_sale['status']['code'] == 1:
                 # Success without result
                 return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
             else:
                 sale_history = utility.get_sale_history(data_sale)
-                for key, value in sale_history.items():
-                    if value == 0:
-                        del sale_history[key]
-                return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
+                if sale_history:
+                    for key, value in sale_history.items():
+                        if value == 0:
+                            del sale_history[key]
+                    return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
                     # else:
                     #     return render_template("address-search-results.html",sale_history=0, address_params=address_params)
     except IndexError:
@@ -180,32 +191,32 @@ def get_user_input():
         # pprint.pprint(sales_data)
        
         property_sales = utility.get_area_sale_list(sales_data)
+        if property_sales:
+            no_results = len(property_sales)
+            property_sales = np.array(property_sales)
+            if no_results >0:
+                median_price = np.median(property_sales, axis=0)
+                percent_25_price = np.percentile(property_sales, 25, axis=0)
+                percent_75_price = np.percentile(property_sales, 75, axis=0)
+                area = sales_data['property'][0]['address']['line2']
 
-        no_results = len(property_sales)
-        property_sales = np.array(property_sales)
-        if no_results >0:
-            median_price = np.median(property_sales, axis=0)
-            percent_25_price = np.percentile(property_sales, 25, axis=0)
-            percent_75_price = np.percentile(property_sales, 75, axis=0)
-            area = sales_data['property'][0]['address']['line2']
+                if search_type == 'zipcode':
+                    zip_code = request.args.get(search_type)
+                    trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
+                    trend_response = requests.get(trend_url, headers=headers)
+                    trend_data = trend_response.json()
+                    # print pprint.pprint(trend_data)
+                    area_trend = utility.get_area_sale_trend(trend_data)
+                    return render_template("region-search-results.html", median_price=median_price,
+                                                                        no_results=no_results,
+                                                                        area=area,
+                                                                        percent_25_price=percent_25_price,
+                                                                        percent_75_price=percent_75_price,
+                                                                        trend_data=trend_data,
+                                                                        area_trend=area_trend,
+                                                                        search_params=search_params)
 
-            if search_type == 'zipcode':
-                zip_code = request.args.get(search_type)
-                trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
-                trend_response = requests.get(trend_url, headers=headers)
-                trend_data = trend_response.json()
-                # print pprint.pprint(trend_data)
-                area_trend = utility.get_area_sale_trend(trend_data)
                 return render_template("region-search-results.html", median_price=median_price,
-                                                                    no_results=no_results,
-                                                                    area=area,
-                                                                    percent_25_price=percent_25_price,
-                                                                    percent_75_price=percent_75_price,
-                                                                    trend_data=trend_data,
-                                                                    area_trend=area_trend,
-                                                                    search_params=search_params)
-
-            return render_template("region-search-results.html", median_price=median_price,
                                                                 no_results=no_results,
                                                                 area=area,
                                                                 percent_25_price=percent_25_price,
@@ -288,8 +299,8 @@ def address_sales_history():
                 "label": "Price History",
                 "fill": True,
                 "lineTension": 0.5,
-                "backgroundColor": "rgba(151,187,205,0.2)",
-                "borderColor": "rgba(151,187,205,1)",
+                "backgroundColor": "#c45850",
+                "borderColor": "#c45850",
                 "borderCapStyle": 'butt',
                 "borderDash": [],
                 "borderDashOffset": 0.0,
