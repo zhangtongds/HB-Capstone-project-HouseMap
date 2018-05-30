@@ -40,7 +40,7 @@ def homepage():
         'city': ['city', 'state']
     }
     allowed_fields = field_map[search_type]
-    return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
+    return render_template("homepage-autofill.html", allowed_fields=allowed_fields, search_type=search_type)
     # return render_template("login.html")
 @app.route("/register", methods=['GET'])
 def show_registration():
@@ -146,6 +146,7 @@ def get_user_input():
             county = utility.get_county(data_prop)
             wall_type = utility.get_wall_type(data_prop)
             bldg_type = utility.get_bdlg_type(data_prop)
+            prop_size = utility.get_prop_size(data_prop)
             lot_size = utility.get_lot_size(data_prop)
             year_built = utility.get_year_built(data_prop)
             last_modified = utility.get_last_modified(data_prop)
@@ -160,7 +161,8 @@ def get_user_input():
                                     "bldg_type": str(bldg_type),
                                     "lot_size": lot_size,
                                     "year_built": str(year_built),
-                                    "last_modified": str(last_modified)
+                                    "last_modified": str(last_modified),
+                                    "prop_size": prop_size
                                     } 
                                
             if data_sale['status']['code'] == 1:

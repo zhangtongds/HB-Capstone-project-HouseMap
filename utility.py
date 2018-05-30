@@ -158,7 +158,7 @@ def get_lot_size(data):
     """Get the lot size from property detail API call."""
 
     try:
-        return str(data['property'][0]['lot']['lotsize2']) + " sqft"
+        return str(data['property'][0]['lot']['lotsize2']) + " SQFT"
     except KeyError:
         return None
 
@@ -175,5 +175,13 @@ def get_last_modified(data):
 
     try:
         return data['property'][0]['vintage']['lastModified']
+    except KeyError:
+        return None
+
+def get_prop_size(data):
+    """Get the proprerty size from property detail API call."""
+
+    try:
+        return str(data['property'][0]['building']['size']['livingsize']) + " SQFT"
     except KeyError:
         return None

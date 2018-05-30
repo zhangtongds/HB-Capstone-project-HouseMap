@@ -20,6 +20,7 @@ Address: {{  address_params.address }}<br>
 County: {{ address_params.county  }}<br>
 Wall Type: {{ address_params.wall_type }}<br>
 Building Type: {{ address_params.bldg_type  }}<br>
+Property Size: {{address_params.prop_size}}<br>
 Lot Size: {{ address_params.lot_size }}<br>
 Year Built: {{ address_params.year_built }}<br>
 Last Modified: {{ address_params.last_modified }}<br>
@@ -27,7 +28,6 @@ Last Modified: {{ address_params.last_modified }}<br>
 <br>
 <br>
 <br>
-Sales Details:
 <div id='sale_history' value = "{{ sale_history }}">
   <!-- 
         <ul>
@@ -44,6 +44,8 @@ Sales Details:
         </ul> -->
 </div>
 {% if sale_history != 0 %}
+Sales Details:
+
 <div class="line-chart">
   <canvas id="lineChart"></canvas>
   <div id="lineLegend" class="chart-legend"></div>
