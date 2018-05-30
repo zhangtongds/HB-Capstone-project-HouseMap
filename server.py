@@ -40,7 +40,7 @@ def homepage():
         'city': ['city', 'state']
     }
     allowed_fields = field_map[search_type]
-    return render_template("homepage-autofill.html", allowed_fields=allowed_fields, search_type=search_type)
+    return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
     # return render_template("login.html")
 @app.route("/register", methods=['GET'])
 def show_registration():
