@@ -180,7 +180,8 @@ def get_user_input():
         for search_param in params_key:
             value = request.args.get(search_param)
             if search_param == 'city':
-                value = value.split(', ')[0]
+                if value:
+                    value = value.split(', ')[0]
             if value != None and value != "":
                 search_params[search_param] = value      
         sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)       

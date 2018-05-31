@@ -70,7 +70,7 @@
 
 
 </form>
-
+{% if search_type != 'zipcode' %}
 <script>
       function initMap() {  
         autocomplete = new google.maps.places.Autocomplete(
@@ -83,6 +83,7 @@
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"
         async defer></script>
+{% endif %}
 
   </body>
 </html>

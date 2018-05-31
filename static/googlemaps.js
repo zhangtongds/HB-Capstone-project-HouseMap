@@ -21,7 +21,7 @@ let center = {lat: latitude, lng:longitude};
 
 let map = new google.maps.Map(document.querySelector('#map'), {
 	center: center,
-	zoom: 8,
+	zoom: 15,
 // Note: the following are marked the opposite of the default setting
 // (that is, they're marked "false" if they're true by
 // default, and "true" if they're false by default) so that
