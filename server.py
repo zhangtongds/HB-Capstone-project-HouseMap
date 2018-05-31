@@ -36,8 +36,8 @@ def homepage():
 
     field_map = {
         'zipcode': ['zipcode'],
-        'address': ['address', 'city', 'state'],
-        'city': ['city', 'state']
+        'address': ['address'],
+        'city': ['city']
     }
     allowed_fields = field_map[search_type]
     return render_template("homepage.html", allowed_fields=allowed_fields, search_type=search_type)
@@ -63,8 +63,6 @@ def register_form():
         return redirect('/login')
     else:
         user = User(fname= fname, lname=lname, email=email, password=password, zipcode=zipcode)
-        # print user
-        # print "============"
         db.session.add(user)
         db.session.commit()
         flash("You successfully made an account.")
@@ -80,14 +78,11 @@ def show_login():
 def verify_login():
     email = request.form.get("user-email")
     password = request.form.get("user-password")
-    # print email
     found_user = User.query.filter(User.email== email).first()
-    # print find_user
 
     if found_user:
         if found_user.password == password:   
             session['user_id'] = found_user.user_id
-            # print found_user
             flash("You were successfully logged in")
             return redirect("/users/" + str(found_user.user_id))
             
@@ -123,14 +118,13 @@ def get_user_input():
         search_type = session['search_type']
         if search_type == 'address':
             address = request.args.get("address")
-            city = request.args.get("city")
-            state = request.args.get("state")
-            address1 = address.replace(" ", "%20")
+            address = address.split(", ")
+            city = address[1].replace(" ", "%20")
+            state = address[2]
+            address1 = address[0].replace(" ", "%20")
             address2 = city + "%2C%20" + state
-
             property_url = "property/detail?"
             data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
-            pprint.pprint(data_prop)
             sale_url = "saleshistory/detail?"
 
             data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
@@ -167,7 +161,7 @@ def get_user_input():
                                
             if data_sale['status']['code'] == 1:
                 # Success without result
-                return render_template("address-search-results.html",sale_history=0, address_params=address_params)    
+                return render_template("address-search-results.html", sale_history=0, address_params=address_params)    
             else:
                 sale_history = utility.get_sale_history(data_sale)
                 if sale_history:
@@ -177,7 +171,7 @@ def get_user_input():
                     return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
                     # else:
                     #     return render_template("address-search-results.html",sale_history=0, address_params=address_params)
-    except IndexError:
+    except IndexError:  
         return render_template("no-result.html")
     else:
         params_key = ['zipcode', 'city', 'property_type', 'max_no_bed', 'min_no_bed', 'max_no_bath', 'min_no_bath', 'price_from', 'price_to', 'trans_date_from', 'trans_date_to']
@@ -185,13 +179,11 @@ def get_user_input():
         search_params = {}
         for search_param in params_key:
             value = request.args.get(search_param)
-            session[search_param] = value
+            if search_param == 'city':
+                value = value.split(', ')[0]
             if value != None and value != "":
-                search_params[search_param] = value
-         
-        sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)  
-        # pprint.pprint(sales_data)
-       
+                search_params[search_param] = value      
+        sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)       
         property_sales = utility.get_area_sale_list(sales_data)
         if property_sales:
             no_results = len(property_sales)
@@ -227,8 +219,7 @@ def get_user_input():
                                                                 )
         else:
             return render_template("region-search-results.html", no_results=0)
-    # return redirect("/")
-        
+           
 
 @app.route("/search", methods=["POST"])
 def save_search():
