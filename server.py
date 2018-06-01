@@ -186,7 +186,7 @@ def get_user_input():
             if value != None and value != "":
                 search_params[search_param] = value      
         sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)       
-        pprint.pprint(sales_data)
+        # pprint.pprint(sales_data)
         property_sales = utility.get_area_sale_list(sales_data)
         if property_sales:
             no_results = len(property_sales)
@@ -229,6 +229,7 @@ def save_search():
     save_type = request.form.get('save_type')
     save_data = request.form.get('save_data')
     address_url = request.form.get('save_url')
+    searches_url = request.form.get('searches_url')
     # Parsing the unicode into a dictionary.
     save_data = ast.literal_eval(save_data)
     if session.get('user_id'):
@@ -249,8 +250,8 @@ def save_search():
                 trans_date_to=save_data.get('trans_date_to'),
                 property_type=save_data.get('property_type'),
                 saved_date=datetime.datetime.now(),
-                saved_by_user=True
-
+                saved_by_user=True,
+                search_url=searches_url
                 )
 
             db.session.add(search)
@@ -335,7 +336,7 @@ def region_sales_history():
         data_avg.append(region_sales[key][0])
         data_counts.append(region_sales[key][1])
         data_median.append(region_sales[key][2])
-    print labels,data_avg, data_median, data_counts
+    # print labels,data_avg, data_median, data_counts
 
     data_dict = {
         "labels": labels,

@@ -22,8 +22,17 @@
     Saved searches: <br>
     <br>
     {% for search in searches %}
-        The search id is: {{ search.search_id }}, Zipcode: {{ search.zipcode }}, City: {{ search.city}}, State: {{ search.state }}<br>
-
+        <li>
+            <a href="{{ search.search_url }}">
+                {% if search.zipcode %}
+                    The search id is: {{ search.search_id }}, Zipcode: {{ search.zipcode }}<br>
+                {% endif %}
+                {% if search.city %}
+                    The search id is: {{ search.search_id }}, City: {{ search.city }}<br>
+                {% endif %}
+            </a>
+        </li>   
+            <br>
     {% endfor %}
     
 </ul>

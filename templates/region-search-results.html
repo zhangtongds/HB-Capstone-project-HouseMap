@@ -44,9 +44,10 @@
     "use strict";
 
     function handleSave(evt) {
+        let search_url = document.URL
         let search_params = document.getElementById("saved-search").value;
         console.log(search_params)
-        $.post('/search', {save_type : "search", save_data: search_params }, function (data) {
+        $.post('/search', {save_type : "search", save_data: search_params, searches_url: search_url }, function (data) {
             $('#saved-search').text('Search saved');
             $('#saved-search').attr('disabled', true);
             console.log(data);
