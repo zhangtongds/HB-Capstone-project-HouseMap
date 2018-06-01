@@ -128,7 +128,7 @@ def get_user_input():
             sale_url = "saleshistory/detail?"
 
             data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
-
+            # pprint.pprint(data_sale)
             property_id = utility.get_property_id(data_prop)
             zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
             full_address = utility.get_full_address_from_result(data_prop)
@@ -164,13 +164,13 @@ def get_user_input():
                 return render_template("address-search-results.html", sale_history=0, address_params=address_params)    
             else:
                 sale_history = utility.get_sale_history(data_sale)
-                if sale_history:
-                    for key, value in sale_history.items():
-                        if value == 0:
-                            del sale_history[key]
+                for key, value in sale_history.items():
+                    if value == 0:
+                        del sale_history[key]
+                if sale_history or sale_history != {}:
                     return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
-                    # else:
-                    #     return render_template("address-search-results.html",sale_history=0, address_params=address_params)
+                else:
+                    return render_template("address-search-results.html",sale_history=0, address_params=address_params)
     except IndexError:  
         return render_template("no-result.html")
     else:
@@ -185,6 +185,7 @@ def get_user_input():
             if value != None and value != "":
                 search_params[search_param] = value      
         sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)       
+        pprint.pprint(sales_data)
         property_sales = utility.get_area_sale_list(sales_data)
         if property_sales:
             no_results = len(property_sales)
@@ -226,6 +227,7 @@ def get_user_input():
 def save_search():
     save_type = request.form.get('save_type')
     save_data = request.form.get('save_data')
+    address_url = request.form.get('save_url')
     # Parsing the unicode into a dictionary.
     save_data = ast.literal_eval(save_data)
     if session.get('user_id'):
@@ -247,6 +249,7 @@ def save_search():
                 property_type=save_data.get('property_type'),
                 saved_date=datetime.datetime.now(),
                 saved_by_user=True
+
                 )
 
             db.session.add(search)
@@ -265,7 +268,8 @@ def save_search():
                 no_of_beds=int(save_data.get('no_of_room')),
                 no_of_baths=float(save_data.get('no_of_bath')),
                 saved_date=datetime.datetime.now(),
-                saved_by_user=True
+                saved_by_user=True,
+                prop_url=address_url
                 )
             db.session.add(_property)
             db.session.commit()

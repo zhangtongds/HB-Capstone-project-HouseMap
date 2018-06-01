@@ -58,10 +58,10 @@ Sales Details:
 
 <script>
     "use strict";
-
+    let address_url = document.URL;
     function handleSave(evt) {
         let address_params = document.getElementById("saved-property").value;
-        $.post('/search', {save_type : "address",save_data: address_params}, function (data) {
+        $.post('/search', {save_type : "address",save_data: address_params, save_url: address_url}, function (data) {
             $('#saved-property').text('Property Saved.');
             $('#saved-property').attr('disabled', true);
             console.log(data);

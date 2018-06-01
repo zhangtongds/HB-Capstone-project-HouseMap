@@ -63,6 +63,7 @@ class Search(db.Model):
     property_type = db.Column(db.String(50))
     saved_by_user = db.Column(db.Boolean)
     saved_date = db.Column(db.DateTime)
+    search_url = db.Column(db.String(250))
 
     user = db.relationship("User", backref=db.backref("searches", order_by=search_id))
 
@@ -85,7 +86,8 @@ class Property(db.Model):
     address = db.Column(db.String(250))
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    zillow_url = db.Column(db.String(200)) #Needs to involve in Zillow API
+    prop_url = db.Column(db.String(250))
+    zillow_url = db.Column(db.String(250)) #Needs to involve in Zillow API
     no_of_beds = db.Column(db.Integer)
     no_of_baths = db.Column(db.Float)
     saved_date = db.Column(db.DateTime)
