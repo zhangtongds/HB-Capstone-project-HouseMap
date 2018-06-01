@@ -11,8 +11,12 @@
     <br>
     
     {% for property in properties %}
-        {{ property.address }}
-        <br>
+        <li>
+            <a href="{{ property.prop_url }}">
+            {{ property.address }}
+            </a>
+        </li>   
+            <br>
     {% endfor %}
     <br>
     Saved searches: <br>
