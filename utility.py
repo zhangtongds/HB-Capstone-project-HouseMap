@@ -185,3 +185,8 @@ def get_prop_size(data):
         return str(data['property'][0]['building']['size']['livingsize']) + " SQFT"
     except KeyError:
         return None
+
+def dump(obj):
+   for attr in dir(obj):
+       if hasattr( obj, attr ):
+           print "obj.%s = %s" % (attr, getattr(obj, attr))

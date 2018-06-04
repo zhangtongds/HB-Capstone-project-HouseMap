@@ -10,3 +10,7 @@ Jinja2==2.9.6
 MarkupSafe==1.0
 Werkzeug==0.12.2
 numpy==1.14.3
+requests
+xmltodict
+nose
+coverage

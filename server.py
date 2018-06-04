@@ -12,11 +12,14 @@ import json
 import numpy as np
 import ast
 import datetime
+import zillow
 
 
 app = Flask(__name__)
 app.secret_key = "ABC"
-ONBOARD_KEY=os.environ['ONBOARD_KEY']
+ONBOARD_KEY = os.environ['ONBOARD_KEY']
+ZILLOW_KEY = os.environ['ZWSID']
+api = zillow.ValuationApi()
 
 ONBOARD_URL = "http://search.onboard-apis.com/propertyapi/v1.0.0/"
 
@@ -125,6 +128,7 @@ def get_user_input():
             address2 = city + "%2C%20" + state
             property_url = "property/detail?"
             data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
+            # pprint.pprint(data_prop)
             sale_url = "saleshistory/detail?"
 
             data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
@@ -144,6 +148,16 @@ def get_user_input():
             lot_size = utility.get_lot_size(data_prop)
             year_built = utility.get_year_built(data_prop)
             last_modified = utility.get_last_modified(data_prop)
+            # z_address = str(full_address)[:-6]
+            # z_postalcode = str(full_address)[-5:]
+            # print z_address,"============",z_postalcode, "+++++++++++++++"
+            # Calling Zillow API
+            z_address = "3400 Pacific Ave., Marina Del Rey, CA"
+            z_postalcode = "90292"
+            z_data = api.GetSearchResults(ZILLOW_KEY, z_address, z_postalcode)
+            if z_data:
+                z_url = z_data.links.home_details
+
             address_params = {"property_id": str(property_id),
                                     "address": str(full_address),
                                     "latitude": str(latitude),
@@ -153,10 +167,11 @@ def get_user_input():
                                     "county": str(county),
                                     "wall_type": str(wall_type),
                                     "bldg_type": str(bldg_type),
-                                    "lot_size": lot_size,
+                                    "lot_size": str(lot_size),
                                     "year_built": str(year_built),
                                     "last_modified": str(last_modified),
-                                    "prop_size": prop_size
+                                    "prop_size": str(prop_size), 
+                                    "zillow_url": str(z_url)
                                     } 
                                
             if data_sale['status']['code'] == 1:

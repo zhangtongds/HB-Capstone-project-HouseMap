@@ -64,10 +64,14 @@ let marker = addMarker();
 function addInfoWindow() {
   let noBeds = info.no_of_room
   let noBaths = info.no_of_bath
+  let propSize = info.prop_size
+  let yearBuilt = info.year_built
   let contentString = '<div id="content">' +
     '<h2>Property Details:</h2>' +
+    "Property size: " + propSize + '<br>' +
+    "Year Built: " + yearBuilt + '<br>' +
     "Number of beds: " + noBeds + '<br>' +
-    "Number of baths: " + noBaths +
+    "Number of baths: " + noBaths + 
     '</div>';
 
   let infoWindow = new google.maps.InfoWindow({
