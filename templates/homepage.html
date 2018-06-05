@@ -2,89 +2,127 @@
 {% block content %}
 <!DOCTYPE html>
 <html>
-  <body>
+  
 <head>
-<h1>Property Search</h1>
+<h1>HouseMap</h1>
  <style type="text/css">
     #autocomplete
     {
-    position:absolute;
-    min-width:40%;
-    height:4%;
-    top:31%;
-    right:50%;
-    z-index:10;
-    /*background-color:#CCC;
-    border: 1px solid grey;*/
+    width: 300px;
     }   
 </style>
 </head>
 
-
-<form action='/search'>
-    <a href="?search_type=zipcode">Search By Zipcode</a><br>
-    <a href="?search_type=address">Search By Address</a><br>
-    <a href="?search_type=city">Search By City</a><br>
-
-    {% for allowed_field in allowed_fields %}
-           
-        {{ allowed_field.capitalize() }} <input id="autocomplete" type="text", name={{ allowed_field }}><br>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <form action='/search'>
+            <!-- <div class="btn-group" role="group" aria-label="Basic example">
+              <a class="btn btn-secondary" href="?search_type=zipcode">Search By Zipcode</button>
+              <a class="btn btn-secondary" href="?search_type=address">Search By Address</button>
+              <a class="btn btn-secondary" "?search_type=city">Search By City</button>
+            </div> -->
+            <a href="?search_type=zipcode">Search By Zipcode</a><br>
+            <a href="?search_type=address">Search By Address</a><br>
+            <a href="?search_type=city">Search By City</a><br>
+        </div>
+        <div class="row">
+            <div class="column">
+                {% for allowed_field in allowed_fields %}         
+                {{ allowed_field.capitalize() }} 
+            </div>
+            <div class="column">
+                <input id="autocomplete" type="text", name={{ allowed_field }}><br>
+                {% endfor %}
+            </div>
         
-    {% endfor %}
-    <br>
-    <br>
-    <br>
-    <div id="filter">
-        {% if search_type != 'address' %}
-            Filters:<br>
-            Property Type: 
-            <select name="property_type">
-              <option value="">Not Selected</option>
-              <option value="SFR">Single Family</option>
-              <option value="apartment">Apartment</option>
-              <option value="TOWNHOUSE%2FROWHOUSE">Townhouse/Rowhouse</option>
-              <option value="CONDOMINIUM">Condominium</option>
-            </select><br>
-           
-            Minimum of bedrooms: <input type="number", name="min_no_bed">
-            Maximum of bedrooms: <input type="number", name="max_no_bed"><br>
-           
-            Minimum of bathrooms: <input type="number", name="min_no_bath">
-            Maximum of bathrooms: <input type="number", name="max_no_bath"><br>
-            Search transactions from: <input type="date", name="trans_date_from">
-            to: <input type="date", name="trans_date_to"><br>
-            Price range from: <input type="number", name="price_from">
-            to: <input type="number", name="price_to"><br>
-            
-        {% endif %}
-    </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="row">
+            <div id="filter">
+                {% if search_type != 'address' %}
+                    Advanced Filters:<br>
+                    Property Type: 
+                    <select name="property_type">
+                      <option value="">Not Selected</option>
+                      <option value="SFR">Single Family</option>
+                      <option value="apartment">Apartment</option>
+                      <option value="TOWNHOUSE%2FROWHOUSE">Townhouse/Rowhouse</option>
+                      <option value="CONDOMINIUM">Condominium</option>
+                    </select><br>
+                   
+                    Minimum of bedrooms:
+                    <select name="min_no_bed">
+                      <option value="">Not Selected</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    Maximum of bedrooms: 
+                    <select name="max_no_bed">
+                      <option value="">Not Selected</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select><br>
+                    Minimum of bathrooms: 
+                    <select name="min_no_bath">
+                      <option value="">Not Selected</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    Maximum of bathrooms: 
+                    <select name="max_no_bath">
+                      <option value="">Not Selected</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select><br>
+                    Search transactions from: <input type="date", name="trans_date_from">
+                    to: <input type="date", name="trans_date_to"><br>
+                    Price range from: <input type="number", name="price_from">
+                    to: <input type="number", name="price_to"><br>
+                    
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <input type="submit" name="Submit" value="Search">
+            <button type="reset", name='reset'> Reset
+        
+        </div> 
 
-    <input type="submit" name="Submit" value="Search">
+            <br>
+            <br>
+            <br>
+            <br>    
+        </form>
+       <!--  Auto Completion Implementation -->
+            {% if search_type != 'zipcode' %}
+            <script>
+                  function initMap() {  
+                    autocomplete = new google.maps.places.Autocomplete(
+                            document.getElementById('autocomplete')), {
+                          componentRestrictions: {country : "US"}
+                        };
+                    console.log(autocomplete);
+                  }
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <button type="reset", name='reset'> Reset
-    
-
-
-</form>
-{% if search_type != 'zipcode' %}
-<script>
-      function initMap() {  
-        autocomplete = new google.maps.places.Autocomplete(
-                document.getElementById('autocomplete')), {
-              componentRestrictions: {country : "US"}
-            };
-        console.log(autocomplete);
-      }
-
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"
-        async defer></script>
-{% endif %}
-
+                </script>
+                <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"
+                    async defer></script>
+            {% endif %}
   </body>
 </html>
 
