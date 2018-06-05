@@ -214,6 +214,14 @@ def get_user_input():
             property_sales = np.array(property_sales)
             if no_results >0:
                 median_price = np.median(property_sales, axis=0)
+                avg_price = np.average(property_sales, axis=0)
+                print avg_price, "^^^^^^^^^"
+                print median_price, "$$$$$$$$$$"
+                #Removing outliers
+                price_std = np.std(property_sales, axis=0)
+                print price_std,"################"
+                outlier_lower = avg_price - 3*price_std
+                print outlier_lower, "-----------------"
                 percent_25_price = np.percentile(property_sales, 25, axis=0)
                 percent_75_price = np.percentile(property_sales, 75, axis=0)
                 area = sales_data['property'][0]['address']['line2']
@@ -233,17 +241,17 @@ def get_user_input():
                                                                         area_trend=area_trend,
                                                                         search_params=search_params,
                                                                         random_ten_sale_info=random_ten_sale_info)
-
+                #return result for city search
                 return render_template("region-search-results.html", median_price=median_price,
                                                                 no_results=no_results,
                                                                 area=area,
                                                                 percent_25_price=percent_25_price,
                                                                 percent_75_price=percent_75_price,
-                                                                search_params=search_params
+                                                                search_params=search_params,random_ten_sale_info=random_ten_sale_info
                                                                 )
         else:
             return render_template("region-search-results.html", no_results=0)
-
+        # return redirect("/")
 
 @app.route("/search", methods=["POST"])
 def save_search():

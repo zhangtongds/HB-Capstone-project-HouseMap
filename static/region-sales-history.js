@@ -85,14 +85,18 @@ console.log(rand_sales_info)
             "type": "line",
             "label": "25 percentile Price",
             "data": Array(data['labels'].length).fill(percentile_25),
-            "fill": false
-            //"data": [1400000]*data['labels'].length
+            "fill": false,
+            "pointRadius": 0,
+            // "borderColor"："rgba(255, 159, 64)"
+
             },
             {
             "type": "line",
             "label": "75 percentile Price",
             "data": Array(data['labels'].length).fill(percentile_75),
-            "fill": false
+            "fill": false,
+            "pointRadius": 0,
+            // "borderColor"：rgb(255, 159, 64)
             })
 let myLineChart1 = new Chart(ctx1, {
                                         type: 'line',
