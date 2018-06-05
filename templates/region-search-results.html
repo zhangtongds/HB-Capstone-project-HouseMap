@@ -29,6 +29,10 @@
 {% endif %}
 
 <input id="region_sales" value="{{ area_trend }}" hidden>
+<input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
+<input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
+<input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
+
 
 {% if area_trend != 0 %}
 <div class="line-chart">
@@ -36,10 +40,14 @@
   <div id="lineLegend" class="chart-legend"></div>
 </div>
 
+<div class="line-chart1">
+  <canvas id="lineChart1"></canvas>
+  <div id="lineLegend1" class="chart-legend1"></div>
+</div>
+
 {% endif %}
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.js"></script>
 <script>
     "use strict";
 

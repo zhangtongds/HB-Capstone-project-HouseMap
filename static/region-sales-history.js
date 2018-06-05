@@ -34,6 +34,26 @@ let options = {
                         }],
                     }
                 }
+let options1 = { responsive: true,
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                callback: function(label, index, labels) {
+                                    return "$" + parseInt(label/1000)+'k';
+                                }
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '1k = 1000'
+                            }
+                        }
+                    ]
+                }
+ };
+
+
+
 
 let ctx = $("#lineChart").get(0).getContext("2d");
 
@@ -47,23 +67,36 @@ let myLineChart = new Chart(ctx, {
                                         type: 'bar',
                                         data: data,
                                         options: options,
-                                        // annotation: {
-                                        //              drawTime: 'afterDatasetsDraw',
-                                        //               annotations: [{
-                                        //                 type: 'bar',
-                                        //                 drawTime: 'afterDraw',
-                                        //                 mode: 'horizontal',
-                                        //                 scaleID: 'y-axis-0',
-                                        //                 value: 3812500.0,
-                                        //                 borderColor: 'rgb(255, 99, 132)',
-                                        //                 borderWidth: 4,
-                                        //                 borderDash: [2, 2],
-                                        //                 borderDashOffset: 5,
-                                        //                 label: {
-                                        //                     enabled: false,
-                                        //                     content: 'Test label'
-                                        //                         }
-                                        //                         }]
-                                        //             }
+                                    })
+});
+
+let ctx1 = $("#lineChart1").get(0).getContext("2d");
+
+let rand_sales_info = document.getElementById("rand_sales_info").getAttribute("value");
+let percentile_25 = document.getElementById("25_percent").getAttribute("value");
+let percentile_75 = document.getElementById("75_percent").getAttribute("value");
+console.log(rand_sales_info)
+ $.get('/region-prop-info.json', 
+    {"rand_sales_info" : rand_sales_info},
+    function (data, status) {
+    console.log("got data")
+
+    data['datasets'].push({
+            "type": "line",
+            "label": "25 percentile Price",
+            "data": Array(data['labels'].length).fill(percentile_25),
+            "fill": false
+            //"data": [1400000]*data['labels'].length
+            },
+            {
+            "type": "line",
+            "label": "75 percentile Price",
+            "data": Array(data['labels'].length).fill(percentile_75),
+            "fill": false
+            })
+let myLineChart1 = new Chart(ctx1, {
+                                        type: 'line',
+                                        data: data,
+                                        options: options1,
                                     })
 });

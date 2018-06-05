@@ -13,6 +13,7 @@ import numpy as np
 import ast
 import datetime
 import zillow
+import random
 
 
 app = Flask(__name__)
@@ -121,72 +122,73 @@ def get_user_input():
         search_type = session['search_type']
         if search_type == 'address':
             address = request.args.get("address")
-            address = address.split(", ")
-            city = address[1].replace(" ", "%20")
-            state = address[2]
-            address1 = address[0].replace(" ", "%20")
-            address2 = city + "%2C%20" + state
-            property_url = "property/detail?"
-            data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
-            # pprint.pprint(data_prop)
-            sale_url = "saleshistory/detail?"
+            if address:
+                address = address.split(", ")
+                city = address[1].replace(" ", "%20")
+                state = address[2]
+                address1 = address[0].replace(" ", "%20")
+                address2 = city + "%2C%20" + state
+                property_url = "property/detail?"
+                data_prop = utility.get_result_from_api(ONBOARD_URL, property_url, headers, {"address1": address1, "address2": address2})
+                # pprint.pprint(data_prop)
+                sale_url = "saleshistory/detail?"
 
-            data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
-            # pprint.pprint(data_sale)
-            property_id = utility.get_property_id(data_prop)
-            zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
-            full_address = utility.get_full_address_from_result(data_prop)
-            latitude = utility.get_latitude_from_result(data_prop)
-            longitude = utility.get_longitude_from_result(data_prop)
-            no_beds = utility.get_no_beds_from_result(data_prop)
-            no_baths = utility.get_no_beds_from_result(data_prop)
+                data_sale = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, {"address1": address1, "address2": address2})
+                # pprint.pprint(data_sale)
+                property_id = utility.get_property_id(data_prop)
+                zipcode_ten = utility.get_ten_digits_zipcode(data_prop)
+                full_address = utility.get_full_address_from_result(data_prop)
+                latitude = utility.get_latitude_from_result(data_prop)
+                longitude = utility.get_longitude_from_result(data_prop)
+                no_beds = utility.get_no_beds_from_result(data_prop)
+                no_baths = utility.get_no_beds_from_result(data_prop)
 
-            county = utility.get_county(data_prop)
-            wall_type = utility.get_wall_type(data_prop)
-            bldg_type = utility.get_bdlg_type(data_prop)
-            prop_size = utility.get_prop_size(data_prop)
-            lot_size = utility.get_lot_size(data_prop)
-            year_built = utility.get_year_built(data_prop)
-            last_modified = utility.get_last_modified(data_prop)
-            # z_address = str(full_address)[:-6]
-            # z_postalcode = str(full_address)[-5:]
-            # print z_address,"============",z_postalcode, "+++++++++++++++"
-            # Calling Zillow API
-            z_address = "3400 Pacific Ave., Marina Del Rey, CA"
-            z_postalcode = "90292"
-            z_data = api.GetSearchResults(ZILLOW_KEY, z_address, z_postalcode)
-            if z_data:
-                z_url = z_data.links.home_details
+                county = utility.get_county(data_prop)
+                wall_type = utility.get_wall_type(data_prop)
+                bldg_type = utility.get_bdlg_type(data_prop)
+                prop_size = utility.get_prop_size(data_prop)
+                lot_size = utility.get_lot_size(data_prop)
+                year_built = utility.get_year_built(data_prop)
+                last_modified = utility.get_last_modified(data_prop)
+                # z_address = str(full_address)[:-6]
+                # z_postalcode = str(full_address)[-5:]
+                # print z_address,"============",z_postalcode, "+++++++++++++++"
+                # Calling Zillow API
+                z_address = "3400 Pacific Ave., Marina Del Rey, CA"
+                z_postalcode = "90292"
+                z_data = api.GetSearchResults(ZILLOW_KEY, z_address, z_postalcode)
+                if z_data:
+                    z_url = z_data.links.home_details
 
-            address_params = {"property_id": str(property_id),
-                                    "address": str(full_address),
-                                    "latitude": str(latitude),
-                                    "longitude": str(longitude),
-                                    "no_of_room": str(no_beds),
-                                    "no_of_bath": str(no_baths),
-                                    "county": str(county),
-                                    "wall_type": str(wall_type),
-                                    "bldg_type": str(bldg_type),
-                                    "lot_size": str(lot_size),
-                                    "year_built": str(year_built),
-                                    "last_modified": str(last_modified),
-                                    "prop_size": str(prop_size), 
-                                    "zillow_url": str(z_url)
-                                    } 
-                               
-            if data_sale['status']['code'] == 1:
-                # Success without result
-                return render_template("address-search-results.html", sale_history=0, address_params=address_params)    
-            else:
-                sale_history = utility.get_sale_history(data_sale)
-                if sale_history:
-                    for key, value in sale_history.items():
-                        if value == 0:
-                            del sale_history[key]
-                    if sale_history != {}:
-                        return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
-                    else:
-                        return render_template("address-search-results.html",sale_history=0, address_params=address_params)
+                address_params = {"property_id": str(property_id),
+                                        "address": str(full_address),
+                                        "latitude": str(latitude),
+                                        "longitude": str(longitude),
+                                        "no_of_room": str(no_beds),
+                                        "no_of_bath": str(no_baths),
+                                        "county": str(county),
+                                        "wall_type": str(wall_type),
+                                        "bldg_type": str(bldg_type),
+                                        "lot_size": str(lot_size),
+                                        "year_built": str(year_built),
+                                        "last_modified": str(last_modified),
+                                        "prop_size": str(prop_size), 
+                                        "zillow_url": str(z_url)
+                                        } 
+                                   
+                if data_sale['status']['code'] == 1:
+                    # Success without result
+                    return render_template("address-search-results.html", sale_history=0, address_params=address_params)    
+                else:
+                    sale_history = utility.get_sale_history(data_sale)
+                    if sale_history:
+                        for key, value in sale_history.items():
+                            if value == 0:
+                                del sale_history[key]
+                        if sale_history != {}:
+                            return render_template("address-search-results.html", sale_history=sale_history,    address_params=address_params)
+                        else:
+                            return render_template("address-search-results.html",sale_history=0, address_params=address_params)
     except IndexError:  
         return render_template("no-result.html")
     else:
@@ -203,6 +205,10 @@ def get_user_input():
         sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)       
         # pprint.pprint(sales_data)
         property_sales = utility.get_area_sale_list(sales_data)
+        sales_info = utility.get_pro_sale_info(sales_data)
+        if sales_info:
+            random.shuffle(sales_info)
+            random_ten_sale_info = sales_info[0:9]
         if property_sales:
             no_results = len(property_sales)
             property_sales = np.array(property_sales)
@@ -211,7 +217,6 @@ def get_user_input():
                 percent_25_price = np.percentile(property_sales, 25, axis=0)
                 percent_75_price = np.percentile(property_sales, 75, axis=0)
                 area = sales_data['property'][0]['address']['line2']
-
                 if search_type == 'zipcode':
                     zip_code = request.args.get(search_type)
                     trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)
@@ -226,7 +231,8 @@ def get_user_input():
                                                                         percent_75_price=percent_75_price,
                                                                         trend_data=trend_data,
                                                                         area_trend=area_trend,
-                                                                        search_params=search_params)
+                                                                        search_params=search_params,
+                                                                        random_ten_sale_info=random_ten_sale_info)
 
                 return render_template("region-search-results.html", median_price=median_price,
                                                                 no_results=no_results,
@@ -237,7 +243,7 @@ def get_user_input():
                                                                 )
         else:
             return render_template("region-search-results.html", no_results=0)
-           
+
 
 @app.route("/search", methods=["POST"])
 def save_search():
@@ -419,6 +425,45 @@ def region_sales_history():
     }
     return jsonify(data_dict)
 
+@app.route('/region-prop-info.json')
+def region_prop_info():
+    """Return data about region property information, including sales trans date and amount, longitude and latitude."""
+    region_sales = request.args.get('rand_sales_info')
+    rand_prop_info = ast.literal_eval(region_sales)
+    date = []
+    amount = []
+    for item in rand_prop_info:
+        date.append(item[1])
+        amount.append(item[2])
+
+    data_dict = {
+        "labels": date,
+        "datasets": [
+            {
+                "type": "line",
+                "label": "Average Price",
+                "fill": False,
+                "lineTension": 0.5,
+                "backgroundColor": "rgba(151,187,205,1)",
+                "borderColor": "rgba(151,187,205,1)",
+                "borderCapStyle": 'butt',
+                "borderDash": [],
+                "borderDashOffset": 0.0,
+                "borderJoinStyle": 'miter',
+                "pointBorderColor": "rgba(151,187,205,1)",
+                "pointBackgroundColor": "#fff",
+                "pointBorderWidth": 1,
+                "pointHoverRadius": 5,
+                "pointHoverBackgroundColor": "#fff",
+                "pointHoverBorderColor": "rgba(151,187,205,1)",
+                "pointHoverBorderWidth": 2,
+                "pointHitRadius": 10,
+                "data": amount,
+                "spanGaps": False
+                }
+            ]
+        }
+    return jsonify(data_dict)
 if __name__ == "__main__":
 
     connect_to_db(app)

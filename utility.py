@@ -78,6 +78,24 @@ def get_area_sale_list(data):
     except KeyError:
         return None
 
+def get_pro_sale_info(data):
+    """Getting property id, sale date and sale amount history from property detail API call."""
+
+    property_info = []  
+    try:
+        for item in data['property']:
+            prop_id = item['identifier']['obPropId']
+            sale_date = item['sale']['amount']['salerecdate']
+            sale_amt = item['sale']['amount']['saleamt']
+            latitude = item['location']['latitude']
+            longitude = item['location']['longitude']
+
+            if sale_amt != 0:
+                property_info.append([prop_id,sale_date,sale_amt, latitude, longitude])
+        return property_info
+    except KeyError:
+        return None
+
 def get_area_sale_trend(data):
     """Getting sales trend for a zipcode from sales trend API call."""
     
