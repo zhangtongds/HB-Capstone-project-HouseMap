@@ -206,25 +206,24 @@ def get_user_input():
         # pprint.pprint(sales_data)
         property_sales = utility.get_area_sale_list(sales_data)
         sales_info = utility.get_pro_sale_info(sales_data)
-        if sales_info:
-            random.shuffle(sales_info)
-            random_ten_sale_info = sales_info[0:9]
+
         if property_sales:
             no_results = len(property_sales)
             property_sales = np.array(property_sales)
             if no_results >0:
                 median_price = np.median(property_sales, axis=0)
-                avg_price = np.average(property_sales, axis=0)
-                print avg_price, "^^^^^^^^^"
-                print median_price, "$$$$$$$$$$"
-                #Removing outliers
-                price_std = np.std(property_sales, axis=0)
-                print price_std,"################"
-                outlier_lower = avg_price - 3*price_std
-                print outlier_lower, "-----------------"
                 percent_25_price = np.percentile(property_sales, 25, axis=0)
                 percent_75_price = np.percentile(property_sales, 75, axis=0)
                 area = sales_data['property'][0]['address']['line2']
+
+                random_ten_sale_info = []
+                if sales_info:
+                    random.shuffle(sales_info)
+                    random_twenty_sale_info = sales_info[0:20]
+                    for item in random_twenty_sale_info:
+                        if item[2] < 5*median_price[1]:
+                            random_ten_sale_info.append(item)
+                random_ten_sale_info = random_ten_sale_info[0:10]
                 if search_type == 'zipcode':
                     zip_code = request.args.get(search_type)
                     trend_url = "https://search.onboard-apis.com/propertyapi/v1.0.0/salestrend/snapshot?geoid=ZI{}&interval=yearly&startyear=2000&endyear=2018".format(zip_code)

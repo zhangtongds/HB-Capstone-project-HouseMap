@@ -4,7 +4,6 @@
 <html>
   
 <head>
-<h1>HouseMap</h1>
  <style type="text/css">
     #autocomplete
     {
@@ -15,6 +14,8 @@
 
 <body>
     <div class="container-fluid">
+        <br>
+        <br>
         <div class="row">
             <form action='/search'>
             <!-- <div class="btn-group" role="group" aria-label="Basic example">
@@ -28,8 +29,6 @@
                 <a class="btn btn-secondary" href="?search_type=city">Search By City</a><br>
             </div>
         </div>
-        <br>
-        <br>
         <div class="row">
             <div class="column">
                 {% for allowed_field in allowed_fields %}         
