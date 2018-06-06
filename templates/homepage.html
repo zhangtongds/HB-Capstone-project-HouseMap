@@ -22,10 +22,14 @@
               <a class="btn btn-secondary" href="?search_type=address">Search By Address</button>
               <a class="btn btn-secondary" "?search_type=city">Search By City</button>
             </div> -->
-            <a href="?search_type=zipcode">Search By Zipcode</a><br>
-            <a href="?search_type=address">Search By Address</a><br>
-            <a href="?search_type=city">Search By City</a><br>
+            <div class="btn-group btn-group-toggle" role="group">
+                <a class="btn btn-secondary" href="?search_type=zipcode">Search By Zipcode</a><br>
+                <a class="btn btn-secondary" href="?search_type=address">Search By Address</a><br>
+                <a class="btn btn-secondary" href="?search_type=city">Search By City</a><br>
+            </div>
         </div>
+        <br>
+        <br>
         <div class="row">
             <div class="column">
                 {% for allowed_field in allowed_fields %}         
@@ -98,8 +102,8 @@
             </div>
         </div>
         <div class="row">
-            <input type="submit" name="Submit" value="Search">
-            <button type="reset", name='reset'> Reset
+            <input type="submit" name="Submit" class="btn btn-lg btn-primary" value="Search">
+            <button type="reset" class="btn btn-secondary btn-lg" name='reset'> Reset
         
         </div> 
 
