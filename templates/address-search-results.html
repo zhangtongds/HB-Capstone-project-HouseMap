@@ -9,7 +9,7 @@
     <style type="text/css">
         html, body { height: 100%; margin: 0; padding: 0; }
         #map { 
-            height: 100%;
+            height: 500px;
             width: 70%;
             margin: auto;
             }
@@ -21,92 +21,90 @@
 </head>
 
 <body>
-
-<div class="row">
-    <div class="col-10 mx-auto">
-        <i class="fas fa-home"></i>
-        {{  address_params.address }}<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-10 mx-auto">
+            <i class="fas fa-home"></i>
+            {{  address_params.address }}<br>
+        </div>
+        <div class="col-10 mx-auto">
+            Favorite  <button type="button", id='saved-property', value = "{{ address_params }}"> <i class="far fa-heart"></i>
+        </div>
+        <div class="search-container col-10 mx-auto">
+            <div class="col mx-auto">
+                <!-- Property ID: {{  address_params.property_id }}<br> -->
+                County: {{ address_params.county  }}<br>
+                <!-- Number rooms: {{ address_params.no_of_room }}<br> -->
+                <!-- Number of baths: {{ address_params.no_of_bath }}<br> -->
+                Building Type: {{ address_params.bldg_type  }}<br>
+                Property Size: {{address_params.prop_size}}<br>
+                Lot Size: {{ address_params.lot_size }}<br>
+                <!-- Year Built: {{ address_params.year_built }}<br> -->
+                Last Modified: {{ address_params.last_modified }}<br>
+                Wall Type: {{ address_params.wall_type }}<br>
+                <a href="{{ address_params.zillow_url }}">
+                        See me on Zillow!
+                        </a><br>
+            </div>
+        </div>
+        
+        
+        
     </div>
-    <div class="search-container col-10 mx-auto">
-        <div class="col mx-auto">
-            <!-- Property ID: {{  address_params.property_id }}<br> -->
-            County: {{ address_params.county  }}<br>
-            <!-- Number rooms: {{ address_params.no_of_room }}<br> -->
-            <!-- Number of baths: {{ address_params.no_of_bath }}<br> -->
-            Building Type: {{ address_params.bldg_type  }}<br>
-            Property Size: {{address_params.prop_size}}<br>
-            Lot Size: {{ address_params.lot_size }}<br>
-            <!-- Year Built: {{ address_params.year_built }}<br> -->
-            Last Modified: {{ address_params.last_modified }}<br>
-            Wall Type: {{ address_params.wall_type }}<br>
-            <a href="{{ address_params.zillow_url }}">
-                    See me on Zillow!
-                    </a><br>
+    <br>
+    <div id='sale_history' value = "{{ sale_history }}">
+
+    </div>
+    <br>
+    {% if sale_history != 0 %}
+
+    <div class="row">
+        <div class="col-8 mx-auto">
+            Sales Details:
+            <div class="line-chart">
+              <canvas id="lineChart"></canvas>
+              <div id="lineLegend" class="chart-legend"></div>
+            </div>
         </div>
     </div>
-    
-    
-    
-</div>
-<br>
-<div id='sale_history' value = "{{ sale_history }}">
-
-</div>
-
-<div class="row">
-    <div class="col-10 mx-auto">
-        <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
-    </div>
-</div>
-<br>
-{% if sale_history != 0 %}
-
-<div class="row">
-    <div class="col-8 mx-auto">
-        Sales Details:
-        <div class="line-chart">
-          <canvas id="lineChart"></canvas>
-          <div id="lineLegend" class="chart-legend"></div>
-        </div>
-    </div>
-</div>
-{% endif %}
+    {% endif %}
 
 
 
-<script>
-    "use strict";
-    let address_url = document.URL;
-    function handleSave(evt) {
-        let address_params = document.getElementById("saved-property").value;
-        $.post('/search', {save_type : "address",save_data: address_params, save_url: address_url}, function (data) {
-            $('#saved-property').text('Property Saved.');
-            $('#saved-property').attr('disabled', true);
-            console.log(data);
-        });
-    }
+    <script>
+        "use strict";
+        let address_url = document.URL;
+        function handleSave(evt) {
+            let address_params = document.getElementById("saved-property").value;
+            $.post('/search', {save_type : "address",save_data: address_params, save_url: address_url}, function (data) {
+                // $('#saved-property').text('Property Saved.');
+                 $('#saved-property').find("i").removeClass("far fa-heart").addClass("fas fa-heart");
+                $('#saved-property').attr('disabled', true);
+                console.log(data);
+            });
+        }
 
-    $('#saved-property').on('click', handleSave);
+        $('#saved-property').on('click', handleSave);
 
-</script>
+    </script>
 
-<input id="propertymap" value="{{ address_params }}" hidden>
-<input id="saleshistory" value="{{ sale_history }}" hidden>
-<br>
-<br>
-<div id="map"></div>
+    <input id="propertymap" value="{{ address_params }}" hidden>
+    <input id="saleshistory" value="{{ sale_history }}" hidden>
+    <br>
+    <br>
+    <div id="map"></div>
 
-    <!-- Google maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+        <!-- Google maps API -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
 
-    <!-- what it looks like with a key -->
-<!-- <script async defer
-//       src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
-</script> -->
+        <!-- what it looks like with a key -->
+    <!-- <script async defer
+    //       src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE&callback=initMap">
+    </script> -->
 
-    <script src="../static/googlemaps.js"></script>
-    <script src="../static/address-sales-history.js"></script>
-    
+        <script src="../static/googlemaps.js"></script>
+        <script src="../static/address-sales-history.js"></script>
+    </div>    
 </body>
 {% endblock %}
 
