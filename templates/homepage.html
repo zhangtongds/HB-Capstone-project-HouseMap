@@ -15,13 +15,13 @@
     /*background-color: red;*/
     background-size: cover;
     }
-    a:link {
+    /*a:link {
         background-color: #16364A;
         border: none;
         display: inline-block;
         width: 33%;
 
-    }
+    }*/
     #search {
         background-color: #B5B58F;
         border: none;
@@ -49,6 +49,10 @@
 
     .btn-primary {
         border-radius: 0;
+        background-color: #16364A;
+        border: none;
+        display: inline-block;
+        width: 33%;
     }
 
     .btn-secondary {
@@ -85,10 +89,10 @@
                     <!-- {{ allowed_field.capitalize() }}  -->
                 
                
-                <input id="autocomplete" type="text", name={{ allowed_field }} value= "Enter {{ allowed_field }}">
+                <input id="autocomplete" type="text", name={{ allowed_field }}>
                 {% endfor %}
 
-                <input type="submit" id="search" name="Submit" class="btn btn-sm btn-primary" value="Search">
+                <input type="submit" id="search" name="Submit" class="btn btn-sm btn-secondary" value="Search">
                 <button type="reset" class="btn btn-secondary btn-sm" name='reset'> Reset
                
             
@@ -98,7 +102,7 @@
         <br>
         <br>
         <div class="row align-items-center">
-            <div class="col-8 mx-auto">
+            <div class="col-10 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
                     Advanced Filters:<br>

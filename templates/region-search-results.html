@@ -1,46 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
+<head>
+    <style type="text/css">
+        html, body { height: 100%; margin: 0; padding: 0; }
+        
+    </style>
+</head>
 
-{% if no_results > 0 %}
-    We have searched your area: {{ area }}<br>
-    <!-- {% if not area_trend %}
-        The median property price is ${{ median_price[1]  }}.<br>
+<body>
+<div class="row" >
+    <div class="col-8 mx-auto">
+        {% if no_results > 0 %}
+        We have searched your area: {{ area }}<br>
+        <!-- {% if not area_trend %}
+            The median property price is ${{ median_price[1]  }}.<br>
+            <br>
+        {% endif %}
+        The 25% percentile price is ${{  percent_25_price[1]  }}.<br>
         <br>
-    {% endif %}
-    The 25% percentile price is ${{  percent_25_price[1]  }}.<br>
-    <br>
-    The 75% percentile price is ${{  percent_75_price[1]  }}. -->
-    
-    <!-- {% if area_trend %}
-    {% for key, value in area_trend.items() %}
+        The 75% percentile price is ${{  percent_75_price[1]  }}. -->
+        
+        <!-- {% if area_trend %}
+        {% for key, value in area_trend.items() %}
 
-        Year {{ key }}, average price {{ value[0] }}, home count {{ value[1] }}, median price {{ value[2] }}.<br>
-        <br>
-    {% endfor %}
-    {% endif %} -->
-    <button type="button", id='saved-search', value = "{{ search_params }}" > Save this search</button>
-{% else %}
+            Year {{ key }}, average price {{ value[0] }}, home count {{ value[1] }}, median price {{ value[2] }}.<br>
+            <br>
+        {% endfor %}
+        {% endif %} -->
+        <button type="button", id='saved-search', value = "{{ search_params }}" > Save this search</button>
+        {% else %}
 
-    Sorry, no results, please search again.<br>
-{% endif %}
+            Sorry, no results, please search again.<br>
+        {% endif %}
+    </div>
+</div>
+
 
 <input id="region_sales" value="{{ area_trend }}" hidden>
 <input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
 <input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
 <input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
 
-{% if area_trend != 0 %}
-<div class="line-chart">
-  <canvas id="lineChart"></canvas>
-  <div id="lineLegend" class="chart-legend"></div>
-</div>
+<div class="row" >
+    <div class="search-container col-8 mx-auto">
 
-<div class="line-chart1">
-  <canvas id="lineChart1"></canvas>
-  <div id="lineLegend1" class="chart-legend1"></div>
-</div>
+        {% if area_trend != 0 %}
+        <div class="line-chart">
+          <canvas id="lineChart"></canvas>
+          <div id="lineLegend" class="chart-legend"></div>
+        </div>
 
-{% endif %}
+        <div class="line-chart1">
+          <canvas id="lineChart1"></canvas>
+          <div id="lineLegend1" class="chart-legend1"></div>
+        </div>
+
+        {% endif %}
+    </div>
+</div>
 
 <script>
     "use strict";
@@ -60,5 +77,6 @@
 
 </script>
 <script src="../static/region-sales-history.js"></script>
+</body>
 
 {% endblock %}

@@ -8,26 +8,33 @@
 <head>
     <style type="text/css">
         html, body { height: 100%; margin: 0; padding: 0; }
-        #map { height: 100%; }
+        #map { 
+            height: 100%;
+            width: 70%;
+            margin: auto; 
+            }
     </style>
 </head>
 
 <body>
-
-Property ID: {{  address_params.property_id }}<br>
-Address: {{  address_params.address }}<br>
-County: {{ address_params.county  }}<br>
-Number rooms: {{ address_params.no_of_room }}<br>
-Number of baths: {{ address_params.no_of_bath }}<br>
-Building Type: {{ address_params.bldg_type  }}<br>
-Property Size: {{address_params.prop_size}}<br>
-Lot Size: {{ address_params.lot_size }}<br>
-Year Built: {{ address_params.year_built }}<br>
-Last Modified: {{ address_params.last_modified }}<br>
-Wall Type: {{ address_params.wall_type }}<br>
-Zillow URL: <a href="{{ address_params.zillow_url }}">
-            {{ address_params.zillow_url }}
-            </a><br>
+<div class="row" >
+    <div class="search-container col-10 mx-auto">
+        Property ID: {{  address_params.property_id }}<br>
+        Address: {{  address_params.address }}<br>
+        County: {{ address_params.county  }}<br>
+        Number rooms: {{ address_params.no_of_room }}<br>
+        Number of baths: {{ address_params.no_of_bath }}<br>
+        Building Type: {{ address_params.bldg_type  }}<br>
+        Property Size: {{address_params.prop_size}}<br>
+        Lot Size: {{ address_params.lot_size }}<br>
+        Year Built: {{ address_params.year_built }}<br>
+        Last Modified: {{ address_params.last_modified }}<br>
+        Wall Type: {{ address_params.wall_type }}<br>
+        Zillow URL: <a href="{{ address_params.zillow_url }}">
+                    {{ address_params.zillow_url }}
+                    </a><br>
+    </div>
+</div>
 <br>
 <br>
 <br>
@@ -48,16 +55,22 @@ Zillow URL: <a href="{{ address_params.zillow_url }}">
         </ul> -->
 </div>
 {% if sale_history != 0 %}
-Sales Details:
 
-<div class="line-chart">
-  <canvas id="lineChart"></canvas>
-  <div id="lineLegend" class="chart-legend"></div>
+<div class="row">
+    <div class="col-8 mx-auto">
+        Sales Details:
+        <div class="line-chart">
+          <canvas id="lineChart"></canvas>
+          <div id="lineLegend" class="chart-legend"></div>
+        </div>
+    </div>
 </div>
 {% endif %}
 
-<div>
-    <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
+<div class="row">
+    <div class="col-10 mx-auto">
+        <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
+    </div>
 </div>
 
 <script>
