@@ -42,11 +42,11 @@
     <input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
 {% endif %}
 
-{% if percent_25_price %}
+{% if percent_25_price[1] %}
     <input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
 {% endif %}
 
-{% if percent_75_price %}
+{% if percent_75_price[1] %}
     <input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
 {% endif %}
 
