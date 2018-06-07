@@ -36,24 +36,16 @@
     </div>
 </div>
 <br>
-<br>
-<br>
-<br>
 <div id='sale_history' value = "{{ sale_history }}">
-  <!-- 
-        <ul>
-            {% if sale_history != 0 %}
-                {% for i,sale in sale_history.items() %}
-                <li>
-                    Sale Date: {{  i  }}   Price: ${{  sale  }}
-                </li>
-                {% endfor %}
-            {% else %}
-                No sales data available for this address.
 
-            {% endif %}
-        </ul> -->
 </div>
+
+<div class="row">
+    <div class="col-10 mx-auto">
+        <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
+    </div>
+</div>
+<br>
 {% if sale_history != 0 %}
 
 <div class="row">
@@ -67,11 +59,7 @@
 </div>
 {% endif %}
 
-<div class="row">
-    <div class="col-10 mx-auto">
-        <button type="button", id='saved-property', value = "{{ address_params }}"> Save this property
-    </div>
-</div>
+
 
 <script>
     "use strict";

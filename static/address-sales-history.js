@@ -1,7 +1,3 @@
-// let salesHistory = $("#saleshistory").val();
-// console.log(salesHistory)
-
-// console.log(sales);
 
 let options = { responsive: true,
                 scales: {
@@ -21,11 +17,6 @@ let options = { responsive: true,
                 }
  };
 
-
-
-// 
-
-
 let ctx = $("#lineChart").get(0).getContext("2d");
 
 let sales_trend_data = document.getElementById("sale_history").getAttribute("value");
@@ -38,7 +29,5 @@ let myLineChart = new Chart(ctx, {
                                         data: data,
                                         options: options
                                     })
-$('#lineLegend').html(myLineChart.generateLegend());
-
 });
 

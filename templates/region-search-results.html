@@ -34,12 +34,21 @@
         {% endif %}
     </div>
 </div>
+{% if area_trend %}
+    <input id="region_sales" value="{{ area_trend }}" hidden>
+{% endif %}
 
+{% if random_ten_sale_info %}
+    <input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
+{% endif %}
 
-<input id="region_sales" value="{{ area_trend }}" hidden>
-<input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
-<input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
-<input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
+{% if percent_25_price %}
+    <input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
+{% endif %}
+
+{% if percent_75_price %}
+    <input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
+{% endif %}
 
 <div class="row" >
     <div class="search-container col-8 mx-auto">

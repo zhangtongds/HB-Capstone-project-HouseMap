@@ -1,7 +1,16 @@
 {% extends 'base.html' %}
 {% block content %}
+<head>
+    <!-- <h2>User Page</h2> -->
+    <style type="text/css">
+        html, body { height: 100%; margin: 0; padding: 0; }    
+    </style>
+</head>
 
-<h2>User Page</h2>
+<body>
+<div class="row" >
+    <div class="col-8 mx-auto">
+
 
 <ul>
     Name: {{ user.fname }}<br>
@@ -36,6 +45,7 @@
     {% endfor %}
     
 </ul>
-
+</div>
+</div>
 
 {% endblock %}
