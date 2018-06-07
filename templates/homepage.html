@@ -8,7 +8,53 @@
     #autocomplete
     {
     width: 300px;
+    color: Gray;
     }   
+    .container-fluid {
+    background: url(../static/architectural-design-architecture-beach-453201.jpg) no-repeat center center;
+    /*background-color: red;*/
+    background-size: cover;
+    }
+    a:link {
+        background-color: #16364A;
+        border: none;
+        display: inline-block;
+        width: 33%;
+
+    }
+    #search {
+        background-color: #B5B58F;
+        border: none;
+    }
+    #filter {
+        color: White;
+    }
+
+    .search-container div {
+        margin:0 auto;
+    }
+
+    .col-10 form {
+        display: inline-block;
+        width: 100%;
+    }
+
+    .btn-group-toggle {
+        width; 100%
+    }
+
+    .row {
+        justify-content: center;
+    }
+
+    .btn-primary {
+        border-radius: 0;
+    }
+
+    .btn-secondary {
+        border-radius: 0;
+    }
+
 </style>
 </head>
 
@@ -16,34 +62,43 @@
     <div class="container-fluid">
         <br>
         <br>
-        <div class="row">
-            <form action='/search'>
-            <!-- <div class="btn-group" role="group" aria-label="Basic example">
-              <a class="btn btn-secondary" href="?search_type=zipcode">Search By Zipcode</button>
-              <a class="btn btn-secondary" href="?search_type=address">Search By Address</button>
-              <a class="btn btn-secondary" "?search_type=city">Search By City</button>
-            </div> -->
-            <div class="btn-group btn-group-toggle" role="group">
-                <a class="btn btn-secondary" href="?search_type=zipcode">Search By Zipcode</a><br>
-                <a class="btn btn-secondary" href="?search_type=address">Search By Address</a><br>
-                <a class="btn btn-secondary" href="?search_type=city">Search By City</a><br>
-            </div>
-        </div>
-        <div class="row">
-            <div class="column">
-                {% for allowed_field in allowed_fields %}         
-                {{ allowed_field.capitalize() }} 
-            </div>
-            <div class="column">
-                <input id="autocomplete" type="text", name={{ allowed_field }}><br>
-                {% endfor %}
-            </div>
         
+            
+            <form action='/search' >
+                <!-- <div class="btn-group" role="group" aria-label="Basic example">
+                  <a class="btn btn-secondary" href="?search_type=zipcode">Search By Zipcode</button>
+                  <a class="btn btn-secondary" href="?search_type=address">Search By Address</button>
+                  <a class="btn btn-secondary" "?search_type=city">Search By City</button>
+                </div> -->
+            <div class="search-container col-10 mx-auto">
+                <div class="row" >
+                    <div class="btn-group btn-group-toggle" role="group" id="searchtype">
+                        <a class="btn btn-primary" href="?search_type=zipcode">Search By Zipcode</a><br>
+                        <a class="btn btn-primary" href="?search_type=address">Search By Address</a><br>
+                        <a class="btn btn-primary" href="?search_type=city">Search By City</a><br>
+                        
+                    </div>
+                </div>
+            <div class="row">
+
+                {% for allowed_field in allowed_fields %}         
+                    <!-- {{ allowed_field.capitalize() }}  -->
+                
+               
+                <input id="autocomplete" type="text", name={{ allowed_field }} value= "Enter {{ allowed_field }}">
+                {% endfor %}
+
+                <input type="submit" id="search" name="Submit" class="btn btn-sm btn-primary" value="Search">
+                <button type="reset" class="btn btn-secondary btn-sm" name='reset'> Reset
+               
+            
+            </div>
         </div>
         <br>
         <br>
         <br>
-        <div class="row">
+        <div class="row align-items-center">
+            <div class="col-8 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
                     Advanced Filters:<br>
@@ -98,12 +153,13 @@
                     to: <input type="number", name="price_to"><br>
                     
                 {% endif %}
+                </div>
             </div>
         </div>
-        <div class="row">
-            <input type="submit" name="Submit" class="btn btn-lg btn-primary" value="Search">
-            <button type="reset" class="btn btn-secondary btn-lg" name='reset'> Reset
-        
+        <div class="row align-items-center">
+            <div class="col-6 mx-auto">
+            
+        </div> 
         </div> 
 
             <br>
