@@ -8,10 +8,12 @@
 </head>
 
 <body>
+    <br>
+    <br>
 <div class="row" >
-    <div class="col-8 mx-auto">
+    <div class="col-8 mx-auto" align="center">
         {% if no_results > 0 %}
-        We have searched your area: {{ area }}<br>
+        We have searched your area: {{ area }}<br><br>
         <!-- {% if not area_trend %}
             The median property price is ${{ median_price[1]  }}.<br>
             <br>
@@ -27,12 +29,15 @@
             <br>
         {% endfor %}
         {% endif %} -->
-        <button type="button", id='saved-search', value = "{{ search_params }}" > Save this search</button>
+        <div class="col-10" align="right">
+            Save this search  <button type="button", id='saved-search', value = "{{ search_params }}" ><i class="far fa-heart"></i></button>
+        </div>
         {% else %}
 
             Sorry, no results, please search again.<br>
         {% endif %}
     </div>
+
 </div>
 {% if area_trend %}
     <input id="region_sales" value="{{ area_trend }}" hidden>
@@ -52,13 +57,16 @@
 
 <div class="row" >
     <div class="search-container col-8 mx-auto">
-
+        
         {% if area_trend != 0 %}
+        Sales Trend:
         <div class="line-chart">
           <canvas id="lineChart"></canvas>
           <div id="lineLegend" class="chart-legend"></div>
         </div>
-
+    <br>
+    <br>
+        Percentile Chart:
         <div class="line-chart1">
           <canvas id="lineChart1"></canvas>
           <div id="lineLegend1" class="chart-legend1"></div>
@@ -66,6 +74,7 @@
 
         {% endif %}
     </div>
+
 </div>
 
 <script>
@@ -76,7 +85,8 @@
         let search_params = document.getElementById("saved-search").value;
         console.log(search_params)
         $.post('/search', {save_type : "search", save_data: search_params, searches_url: search_url }, function (data) {
-            $('#saved-search').text('Search saved');
+            // $('#saved-search').text('Search saved');
+            $('#saved-search').find("i").removeClass("far fa-heart").addClass("fas fa-heart");
             $('#saved-search').attr('disabled', true);
             console.log(data);
         });

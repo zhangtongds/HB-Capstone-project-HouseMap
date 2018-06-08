@@ -17,35 +17,63 @@
            /* display: flex;*/
             column-count: 2;
         }
+       /* .favorite {
+            margin-left:auto; 
+            margin-right:0;
+        }*/
     </style>
 </head>
 
 <body>
 <div class="container-fluid">
+    <div>
+        <br>
+        <br>
+
+    </div>
     <div class="row">
-        <div class="col-10 mx-auto">
+        <div class="col-8 mx-auto">
             <i class="fas fa-home"></i>
             {{  address_params.address }}<br>
         </div>
-        <div class="col-10 mx-auto">
-            Favorite  <button type="button", id='saved-property', value = "{{ address_params }}"> <i class="far fa-heart"></i>
+        <div class="col-9" align="right">
+            Favorite  <button type="button", id='saved-property', value = "{{ address_params }}"><i class="far fa-heart"></i>
         </div>
-        <div class="search-container col-10 mx-auto">
+        <br>
+        <br>
+        <div class="search-container col-8 mx-auto">
             <div class="col mx-auto">
                 <!-- Property ID: {{  address_params.property_id }}<br> -->
-                County: {{ address_params.county  }}<br>
+                <div>
+                    <i class="fas fa-university"></i>
+                    County: {{ address_params.county  }}<br>
+                </div>
                 <!-- Number rooms: {{ address_params.no_of_room }}<br> -->
                 <!-- Number of baths: {{ address_params.no_of_bath }}<br> -->
-                Building Type: {{ address_params.bldg_type  }}<br>
-                Property Size: {{address_params.prop_size}}<br>
-                Lot Size: {{ address_params.lot_size }}<br>
+                <div>
+                    <i class="far fa-building"></i>
+                    Building Type: {{ address_params.bldg_type  }}<br>
+                </div>
+                <div>
+                    <i class="far fa-building"></i>
+                    Property Size: {{address_params.prop_size}}<br>
+                </div>
+                <div>
+                    <i class="fas fa-tree"></i>
+                    Lot Size: {{ address_params.lot_size }}<br>
+                </div>
                 <!-- Year Built: {{ address_params.year_built }}<br> -->
-                Last Modified: {{ address_params.last_modified }}<br>
-                Wall Type: {{ address_params.wall_type }}<br>
-                <a href="{{ address_params.zillow_url }}">
-                        See me on Zillow!
-                        </a><br>
-            </div>
+                <div>
+                    <i class="fas fa-wrench"></i>
+                    Last Modified: {{ address_params.last_modified }}<br>
+                </div>
+                <div>
+                    <i class="fas fa-hockey-puck"></i>
+                    Wall Type: {{ address_params.wall_type }}<br>
+                </div>
+                    <i class="fas fa-link"></i>
+                    <a href="{{ address_params.zillow_url }}">See me on Zillow!</a><br>
+                </div>
         </div>
         
         
@@ -78,7 +106,7 @@
             let address_params = document.getElementById("saved-property").value;
             $.post('/search', {save_type : "address",save_data: address_params, save_url: address_url}, function (data) {
                 // $('#saved-property').text('Property Saved.');
-                 $('#saved-property').find("i").removeClass("far fa-heart").addClass("fas fa-heart");
+                $('#saved-property').find("i").removeClass("far fa-heart").addClass("fas fa-heart");
                 $('#saved-property').attr('disabled', true);
                 console.log(data);
             });

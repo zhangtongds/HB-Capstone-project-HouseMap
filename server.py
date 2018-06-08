@@ -150,16 +150,15 @@ def get_user_input():
                 lot_size = utility.get_lot_size(data_prop)
                 year_built = utility.get_year_built(data_prop)
                 last_modified = utility.get_last_modified(data_prop)
-                # z_address = str(full_address)[:-6]
-                # z_postalcode = str(full_address)[-5:]
-                # print z_address,"============",z_postalcode, "+++++++++++++++"
+                z_address = str(full_address)[:-6]
+                z_postalcode = str(full_address)[-5:]
+                print z_address,"============",z_postalcode, "+++++++++++++++"
                 # Calling Zillow API
-                z_address = "3400 Pacific Ave., Marina Del Rey, CA"
-                z_postalcode = "90292"
                 z_data = api.GetSearchResults(ZILLOW_KEY, z_address, z_postalcode)
+
                 if z_data:
                     z_url = z_data.links.home_details
-
+                print z_url
                 address_params = {"property_id": str(property_id),
                                         "address": str(full_address),
                                         "latitude": str(latitude),
