@@ -1,13 +1,37 @@
 {% extends 'base.html' %}
 {% block content %}
-
-  <h2>Login</h2>
-  <form action='/login', method="POST">
+<html>
+<head>
+</head>
+<body>
+ <!--  <form action='/login', method="POST">
     Email:<br>
     <input type="email" name="user-email"><br>
     Password: <br>
     <input type="password" name="user-password">
-    <input type="submit" name="Submit", value="Login" ><br>
+    <input type="submit" name="Submit" value="Login" ><br>
 
-  </form>
+  </form> -->
+ <div class="homepage container-fluid">
+    <div align="center">
+        <h2>Login</h2>
+    </div>
+    <div class="col-4 mx-auto">
+        <form action='/login', method="POST">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" name="user-email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Password</label>
+            <input type="password" name="user-password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          </div>
+          <button type="submit" value="Login" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
+
 {% endblock %}
