@@ -66,7 +66,7 @@ console.log(region_history_data)
 let myLineChart = new Chart(ctx, {
                                         type: 'bar',
                                         data: data,
-                                        options: options,
+                                        options: options
                                     })
 });
 
@@ -87,7 +87,8 @@ console.log(rand_sales_info)
             "data": Array(data['labels'].length).fill(percentile_25),
             "fill": false,
             "pointRadius": 0,
-            // "borderColor"："rgba(255, 159, 64)"
+            "borderColor": "#c45850",
+            "borderDash": [10,5]
 
             },
             {
@@ -96,6 +97,8 @@ console.log(rand_sales_info)
             "data": Array(data['labels'].length).fill(percentile_75),
             "fill": false,
             "pointRadius": 0,
+            "borderColor": "#c45850",
+            "borderDash": [10,5]
             // "borderColor"：rgb(255, 159, 64)
             })
 let myLineChart1 = new Chart(ctx1, {
