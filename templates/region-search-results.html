@@ -41,9 +41,9 @@
     </div>
 
 </div>
-{% if area_trend %}
+
     <input id="region_sales" value="{{ area_trend }}" hidden>
-{% endif %}
+
 
 {% if random_ten_sale_info %}
     <input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
@@ -60,12 +60,13 @@
 <div class="row" >
     <div class="search-container col-8 mx-auto">
         
-        {% if area_trend != 0 %}
+        {% if area_trend %}
         Sales Trend:
         <div class="line-chart">
           <canvas id="lineChart"></canvas>
           <div id="lineLegend" class="chart-legend"></div>
         </div>
+        {% endif %}
     <br>
     <br>
         Percentile Chart:
@@ -74,7 +75,7 @@
           <div id="lineLegend1" class="chart-legend1"></div>
         </div>
 
-        {% endif %}
+        
     </div>
 
 </div>

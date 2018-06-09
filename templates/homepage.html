@@ -60,6 +60,14 @@
         border-radius: 0;
     }
 
+    .dropdown {
+        font-size:14px;
+    }
+ .item {
+        font-size:14px;
+        border-radius: 0.5;
+    }
+
 </style>
 </head>
 
@@ -103,18 +111,30 @@
         <br>
         <br>
         <div class="row align-items-center">
-            <div class="col-10 mx-auto">
+            <div class="col-7 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
                     Advanced Filters:<br>
-                    Property Type: 
-                    <select name="property_type">
+                    
+                    <div class="dropdown">
+                        Property Type: 
+                      <select name="property_type" class="item btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Dropdown button
+                      <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
+                        <option class="dropdown-item" value="">Not Selected</option>
+                        <option class="dropdown-item" value="SFR" >Single Family</option>
+                        <option class="dropdown-item" value="apartment">Apartment</option>
+                        <option class="dropdown-item" value="TOWNHOUSE%2FROWHOUSE">Townhouse</option>
+                        <option class="dropdown-item" value="CONDOMINIUM">Condominium</option>
+                      </select>
+                    </div>
+                    <!-- <select name="property_type">
                       <option value="">Not Selected</option>
                       <option value="SFR">Single Family</option>
                       <option value="apartment">Apartment</option>
                       <option value="TOWNHOUSE%2FROWHOUSE">Townhouse/Rowhouse</option>
                       <option value="CONDOMINIUM">Condominium</option>
-                    </select><br>
+                    </select><br> -->
                    
                     Minimum of bedrooms:
                     <select name="min_no_bed">
@@ -166,6 +186,7 @@
             
         </div> 
         </div> 
+        
 
             <br>
             <br>
@@ -187,7 +208,7 @@
                 <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap"
                     async defer></script>
             {% endif %}
-            
+
   </body>
 </html>
 

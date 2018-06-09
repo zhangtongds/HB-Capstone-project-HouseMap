@@ -55,7 +55,10 @@ let options1 = { responsive: true,
 
 
 
-let ctx = $("#lineChart").get(0).getContext("2d");
+let linechart = $("#lineChart").get(0);
+console.log(linechart)
+if (linechart) {
+let ctx = linechart.getContext("2d");
 
 let region_history_data = document.getElementById("region_sales").getAttribute("value");
 console.log(region_history_data)
@@ -69,6 +72,7 @@ let myLineChart = new Chart(ctx, {
                                         options: options
                                     })
 });
+}
 
 let ctx1 = $("#lineChart1").get(0).getContext("2d");
 
