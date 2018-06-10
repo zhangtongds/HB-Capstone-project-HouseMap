@@ -4,7 +4,7 @@
     <!-- <h2>User Page</h2> -->
     <style type="text/css">
         html, body { height: 100%; margin: 0; padding: 0; }
-        .card {
+        .search {
             column-count: 2;
         }    
     </style>
@@ -32,7 +32,7 @@
         <div class="span2">
             <div class="btn-group">
                 <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
-                    More
+                    Action 
                     <span class="icon-cog icon-white"></span><span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
@@ -51,18 +51,14 @@
      <br>
     <br>
     </div>
-    <div class="col-8 ml-auto">
-    Saved properties:
+    <div class="col-8" style="padding-right: 300px;">
+    Saved properties:<br>
+    <br>
     {% for property in properties %}
-        <li class="card col" style="width: 23rem; align:center;">
-            <div class="card-body">
-               
-                <h5 class="card-title"> {{ property.address }}</h5>
+        <!-- <li class="card col" style="width: 23rem; align:center;"> -->
+        <li class="list-group-item"> 
 
-                <!-- <p class="card-title">{{ property.address }}</p> -->
-                <a href="{{ property.prop_url }}" class="card-link"> Details
-                </a>
-            </div>
+                <a href="{{ property.prop_url }}" class="ml-auto"> {{ property.address }}</a>
         </li> 
             <br>
     {% endfor %}
@@ -70,7 +66,10 @@
     Saved searches: <br>
     <br>
     {% for search in searches %}
-        <li class="list-group-item">
+
+        <div class="card" style="width: 20rem">
+            
+            <div class="card-body">
             <a href="{{ search.search_url }}">
                 {% if search.zipcode %}
                     Zipcode: {{ search.zipcode }}<br>
@@ -79,7 +78,8 @@
                     City: {{ search.city }}<br>
                 {% endif %}
             </a>
-        </li>   
+        </div>
+        </div>   
             <br>
     {% endfor %}
     </div>
