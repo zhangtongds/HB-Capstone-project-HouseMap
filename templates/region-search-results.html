@@ -45,15 +45,15 @@
     <input id="region_sales" value="{{ area_trend }}" hidden>
 
 
-{% if random_ten_sale_info is not none %}
+{% if random_ten_sale_info is defined %}
     <input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
 {% endif %}
 
-{% if percent_25_price is not none %}
+{% if percent_25_price is defined %}
     <input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
 {% endif %}
 
-{% if percent_75_price is not none %}
+{% if percent_75_price is defined %}
     <input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
 {% endif %}
 
