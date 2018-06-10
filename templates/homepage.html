@@ -95,8 +95,14 @@
                   <a class="btn btn-secondary" href="?search_type=address">Search By Address</button>
                   <a class="btn btn-secondary" "?search_type=city">Search By City</button>
                 </div> -->
+                <br>
+                <br>
+                <br>
+                <br>
+                
             <div class="search-container col-10 mx-auto">
                 <div class="row" >
+
                     <div class="btn-group btn-group-toggle" role="group" id="searchtype">
                         <a class="btn btn-primary" href="?search_type=zipcode">Search By Zipcode</a><br>
                         <a class="btn btn-primary" href="?search_type=address">Search By Address</a><br>
@@ -204,7 +210,8 @@
         <script>
             $("#advanced-filter").hide();
             $("#show-filter").click(function () {
-                 $("#advanced-filter").show();
+                 // $("#advanced-filter").show();
+                 $("#advanced-filter").slideDown();
                  console.log("yah");
             })
         </script>
