@@ -437,12 +437,12 @@ def region_prop_info():
     """Return data about region property information, including sales trans date and amount, longitude and latitude."""
     region_sales = request.args.get('rand_sales_info')
     rand_prop_info = ast.literal_eval(region_sales)
+    rand_prop_info.sort(key=lambda x: x[1])
     date = []
     amount = []
     for item in rand_prop_info:
         date.append(item[1])
         amount.append(item[2])
-
     data_dict = {
         "labels": date,
         "datasets": [
