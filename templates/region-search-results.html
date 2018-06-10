@@ -45,15 +45,15 @@
     <input id="region_sales" value="{{ area_trend }}" hidden>
 
 
-{% if random_ten_sale_info %}
+{% if random_ten_sale_info is not none %}
     <input id="rand_sales_info" value="{{ random_ten_sale_info }}" hidden>
 {% endif %}
 
-{% if percent_25_price[1] %}
+{% if percent_25_price is not none %}
     <input id="25_percent" value="{{ percent_25_price[1] }}" hidden>
 {% endif %}
 
-{% if percent_75_price[1] %}
+{% if percent_75_price is not none %}
     <input id="75_percent" value="{{ percent_75_price[1] }}" hidden>
 {% endif %}
 
@@ -66,10 +66,11 @@
           <canvas id="lineChart"></canvas>
           <div id="lineLegend" class="chart-legend"></div>
         </div>
-        {% endif %}
+        
     <br>
     <br>
         Percentile Chart:
+        {% endif %}
         <div class="line-chart1">
           <canvas id="lineChart1"></canvas>
           <div id="lineLegend1" class="chart-legend1"></div>

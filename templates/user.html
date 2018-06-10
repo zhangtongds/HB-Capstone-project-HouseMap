@@ -20,10 +20,12 @@
     <br>
     
     {% for property in properties %}
-        <li>
-            <a href="{{ property.prop_url }}">
-            {{ property.address }}
-            </a>
+        <li class="card" style="width: 26rem;">
+            <div class="card-body">
+                <p class="card-title">{{ property.address }}</p>
+                <a href="{{ property.prop_url }}" class="card-link"> Link
+                </a>
+            </div>
         </li>   
             <br>
     {% endfor %}
@@ -31,13 +33,13 @@
     Saved searches: <br>
     <br>
     {% for search in searches %}
-        <li>
+        <li class="list-group-item">
             <a href="{{ search.search_url }}">
                 {% if search.zipcode %}
-                    The search id is: {{ search.search_id }}, Zipcode: {{ search.zipcode }}<br>
+                    Zipcode: {{ search.zipcode }}<br>
                 {% endif %}
                 {% if search.city %}
-                    The search id is: {{ search.search_id }}, City: {{ search.city }}<br>
+                    City: {{ search.city }}<br>
                 {% endif %}
             </a>
         </li>   

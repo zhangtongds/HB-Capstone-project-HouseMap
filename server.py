@@ -152,7 +152,7 @@ def get_user_input():
                 last_modified = utility.get_last_modified(data_prop)
                 z_address = str(full_address)[:-6]
                 z_postalcode = str(full_address)[-5:]
-                print z_address,"============",z_postalcode, "+++++++++++++++"
+                # print z_address,"============",z_postalcode, "+++++++++++++++"
                 # Calling Zillow API
                 z_data = api.GetSearchResults(ZILLOW_KEY, z_address, z_postalcode)
 
@@ -230,6 +230,7 @@ def get_user_input():
                     trend_data = trend_response.json()
                     # print pprint.pprint(trend_data)
                     area_trend = utility.get_area_sale_trend(trend_data)
+                    print percent_25_price, "===================="
                     return render_template("region-search-results.html", median_price=median_price,
                                                                         no_results=no_results,
                                                                         area=area,
