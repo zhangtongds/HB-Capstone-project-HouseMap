@@ -14,7 +14,9 @@
     .homepage {
         background: url(../static/architectural-design-architecture-beach-453201.jpg) no-repeat center center;
         /*background-color: red;*/
-        background-size: 1200px 1000px;
+        background-size: cover;
+        height: 800px
+
     }
     /*a:link {
         background-color: #16364A;
@@ -63,10 +65,20 @@
     .dropdown {
         font-size:14px;
     }
- .item {
+
+    .item {
         font-size:14px;
         border-radius: 0.5;
     }
+
+    #footer {
+   
+    position: absolute;
+    top: 800px;
+    /*bottom: 0;*/
+    background: #16364A;
+    width: 100% !important;
+} 
 
 </style>
 </head>
@@ -102,7 +114,8 @@
                 {% endfor %}
 
                 <input type="submit" id="search" name="Submit" class="btn btn-sm btn-secondary" value="Search">
-                <button type="reset" class="btn btn-secondary btn-sm" name='reset'> Reset
+               
+                <button type="button" class="btn btn-secondary btn-sm" id="show-filter"> Filter</button>
                
             
             </div>
@@ -110,7 +123,7 @@
         <br>
         <br>
         <br>
-        <div class="row align-items-center">
+        <div class="row align-items-center" id="advanced-filter" >
             <div class="col-7 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
@@ -178,6 +191,7 @@
                     to: <input type="number", name="price_to"><br>
                     
                 {% endif %}
+                 <button type="reset" class="btn btn-secondary btn-sm" name='reset'> Reset
                 </div>
             </div>
         </div>
@@ -187,12 +201,20 @@
         </div> 
         </div> 
         
+        <script>
+            $("#advanced-filter").hide();
+            $("#show-filter").click(function () {
+                 $("#advanced-filter").show();
+                 console.log("yah");
+            })
+        </script>
 
             <br>
             <br>
             <br>
             <br>    
         </form>
+
        <!--  Auto Completion Implementation -->
             {% if search_type != 'zipcode' %}
             <script>
@@ -212,7 +234,19 @@
   </body>
 </html>
 
-
+<!-- Footer -->
+    <section id="footer" >
+        <div class="container footer navbar-fixed-bottom"> 
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
+                    <p>HouseMap.com</p>
+                    <p class="h6">&copy All right Reversed. HouseMap</p>
+                </div>
+                <!-- </hr> -->
+            </div>  
+        </div>
+    </section>
+    <!-- ./Footer -->
 
 {% endblock %}
 
