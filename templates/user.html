@@ -3,30 +3,67 @@
 <head>
     <!-- <h2>User Page</h2> -->
     <style type="text/css">
-        html, body { height: 100%; margin: 0; padding: 0; }    
+        html, body { height: 100%; margin: 0; padding: 0; }
+        .card {
+            column-count: 2;
+        }    
     </style>
 </head>
 
 <body>
+    <br>
+    <br>
+<div class="container-fluid">
+
 <div class="row" >
-    <div class="col-8 mx-auto">
+    <div class="col-2 mx-auto">
 
+        <div class="row-fluid">
+        <div class="span2" >
+            <img src="https://militaryleadershipcircle.com/wp-content/uploads/2018/04/default-img.png" class="img-circle">
+        </div>
+        
+        <div class="span8">
+            <h3>{{ user.fname }} {{ user.lname }}</h3>
+            <h6>Email: {{ user.email }}</h6>
+            <h6>Location: San Francisco</h6>
+        </div>
+        
+        <div class="span2">
+            <div class="btn-group">
+                <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#">
+                    More
+                    <span class="icon-cog icon-white"></span><span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="#"><span class="icon-wrench"></span> Modify</a></li>
+                    <li><a href="#"><span class="icon-trash"></span> Delete</a></li>
+                </ul>
+            </div>
+        </div>
+</div>
 
-<ul>
-    Name: {{ user.fname }}<br>
-    Zipcode: {{ user.zipcode }}<br>
-    <br>
-    Saved properties: <br>
-    <br>
     
+<ul>
+   <!--  Name: {{ user.fname }}<br>
+    Zipcode: {{ user.zipcode }}<br> -->
+    <br>
+     <br>
+    <br>
+    </div>
+    <div class="col-8 ml-auto">
+    Saved properties:
     {% for property in properties %}
-        <li class="card" style="width: 26rem;">
+        <li class="card col" style="width: 23rem; align:center;">
             <div class="card-body">
-                <p class="card-title">{{ property.address }}</p>
-                <a href="{{ property.prop_url }}" class="card-link"> Link
+               
+                <h5 class="card-title"> {{ property.address }}</h5>
+
+                <!-- <p class="card-title">{{ property.address }}</p> -->
+                <a href="{{ property.prop_url }}" class="card-link"> Details
                 </a>
             </div>
-        </li>   
+        </li> 
             <br>
     {% endfor %}
     <br>
@@ -45,9 +82,9 @@
         </li>   
             <br>
     {% endfor %}
-    
+    </div>
 </ul>
 </div>
 </div>
-
+</div>
 {% endblock %}
