@@ -78,7 +78,14 @@
     /*bottom: 0;*/
     background: #16364A;
     width: 100% !important;
+}
+.property_type {
+    background-color: transparent;
 } 
+
+#filter {
+    margin-left: 100px;
+}
 
 </style>
 </head>
@@ -129,72 +136,58 @@
         <br>
         <br>
         <br>
-        <div class="row align-items-center" id="advanced-filter" >
+        <div class="row align-items-center" id="advanced-filter">
             <div class="col-7 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
-                    Advanced Filters:<br>
-                    
-                    <div class="dropdown">
-                        Property Type: 
-                      <select name="property_type" class="item btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
-                      <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"> -->
-                        <option class="dropdown-item" value="">Not Selected</option>
-                        <option class="dropdown-item" value="SFR" >Single Family</option>
-                        <option class="dropdown-item" value="apartment">Apartment</option>
-                        <option class="dropdown-item" value="TOWNHOUSE%2FROWHOUSE">Townhouse</option>
-                        <option class="dropdown-item" value="CONDOMINIUM">Condominium</option>
-                      </select>
-                    </div>
-                    <!-- <select name="property_type">
-                      <option value="">Not Selected</option>
+                    <select name="property_type">
+                      <option value="">Property Type</option>
                       <option value="SFR">Single Family</option>
                       <option value="apartment">Apartment</option>
                       <option value="TOWNHOUSE%2FROWHOUSE">Townhouse/Rowhouse</option>
                       <option value="CONDOMINIUM">Condominium</option>
-                    </select><br> -->
+                    </select><br>
                    
-                    Minimum of bedrooms:
+                    Bedrooms 
                     <select name="min_no_bed">
-                      <option value="">Not Selected</option>
+                      <option value="">Min</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
                     </select>
-                    Maximum of bedrooms: 
+                   
                     <select name="max_no_bed">
-                      <option value="">Not Selected</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select><br>
-                    Minimum of bathrooms: 
-                    <select name="min_no_bath">
-                      <option value="">Not Selected</option>
+                      <option value=""> Max</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
                     </select>
-                    Maximum of bathrooms: 
+                    Bathrooms
+                    <select name="min_no_bath">
+                      <option value="">Min</option>
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                      <option value="5">5</option>
+                    </select>
+                    
                     <select name="max_no_bath">
-                      <option value="">Not Selected</option>
+                      <option value=""> Max</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
                     </select><br>
-                    Search transactions from: <input type="date", name="trans_date_from">
-                    to: <input type="date", name="trans_date_to"><br>
-                    Price range from: <input type="number", name="price_from">
-                    to: <input type="number", name="price_to"><br>
+                    Transactions from: <input type="date", name="trans_date_from" style="width: 150px;">
+                    to: <input type="date", name="trans_date_to" style="width: 150px;"><br>
+                    Price from: <input type="number", name="price_from" style="width: 150px;">
+                    to: <input type="number", name="price_to" style="width: 150px;"><br>
                     
                 {% endif %}
                  <button type="reset" class="btn btn-secondary btn-sm" name='reset'> Reset
@@ -210,9 +203,8 @@
         <script>
             $("#advanced-filter").hide();
             $("#show-filter").click(function () {
-                 // $("#advanced-filter").show();
                  $("#advanced-filter").slideDown();
-                 console.log("yah");
+               
             })
         </script>
 
