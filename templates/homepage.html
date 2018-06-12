@@ -146,16 +146,31 @@
             <div class="col-7 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
-                    <select name="property_type">
+                Property Type
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-secondary active">
+                        <input name="property_type" type="radio" value="SFR" checked> Single Family
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="property_type" type="radio" value="apartment"> Apartment
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="property_type" type="radio" value="TOWNHOUSE%2FROWHOUSE"> Townhouse
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="property_type" type="radio" value="CONDOMINIUM"> Condominium
+                      </label>
+                    </div><br>
+                    <!-- <select name="property_type">
                       <option value="">Property Type</option>
                       <option value="SFR">Single Family</option>
                       <option value="apartment">Apartment</option>
                       <option value="TOWNHOUSE%2FROWHOUSE">Townhouse/Rowhouse</option>
                       <option value="CONDOMINIUM">Condominium</option>
-                    </select><br>
+                    </select><br> -->
                    <br>
                     Bedrooms 
-                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <div class="bedroom btn-group btn-group-toggle" data-toggle="buttons">
                       <label class="btn btn-secondary active">
                         <input name="min_no_bed" type="radio" value="1" checked> 1+
                       </label>
