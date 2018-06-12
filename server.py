@@ -155,7 +155,7 @@ def get_user_input():
                 # print z_address,"============",z_postalcode, "+++++++++++++++"
                 # Calling Zillow API
                 z_data = api.GetSearchResults(ZILLOW_KEY, z_address, z_postalcode)
-
+                
                 if z_data:
                     z_url = z_data.links.home_details
                 print z_url

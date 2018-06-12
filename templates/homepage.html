@@ -107,28 +107,27 @@
                 <br>
                 <br>
                 
-            <div class="search-container col-10 mx-auto">
-                <div class="row" >
-
-                    <div class="btn-group btn-group-toggle" role="group" id="searchtype">
-                        <a class="btn btn-primary" href="?search_type=zipcode">Search by Zipcode</a><br>
-                        <a class="btn btn-primary" href="?search_type=address">Search by Address</a><br>
-                        <a class="btn btn-primary" href="?search_type=city">Search by City</a><br>
+            <div class="search-container container">
+                <div class="row col-lg-6" style="padding: 0px;">
+                    <div class="col-lg-12 btn-group btn-group-toggle" role="group" id="searchtype">
+                        <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'zipcode' }}" href="?search_type=zipcode">Zipcode</a><br>
+                        <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'address' }}" href="?search_type=address">Address</a><br>
+                        <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'city' }}" href="?search_type=city">City</a><br>
                         
                     </div>
                 </div>
-            <div class="row">
+            <div class="row col-lg-6" >
 
                 {% for allowed_field in allowed_fields %}         
                     <!-- {{ allowed_field.capitalize() }}  -->
                 
                
-                <input id="autocomplete" type="text", name={{ allowed_field }}>
+                <input class="col-sm-8" id="autocomplete" type="text", name={{ allowed_field }}>
                 {% endfor %}
 
-                <input type="submit" id="search" name="Submit" class="btn btn-sm btn-secondary" value="Search">
+                <input type="submit" id="search" name="Submit" class="btn btn-secondary col-sm-2" value="Search">
                
-                <button type="button" class="btn btn-secondary btn-sm" id="show-filter"> Filter</button>
+                <button type="button" class="btn btn-secondary col-sm-2" id="show-filter"> Filter</button>
                
             
             </div>
