@@ -35,7 +35,9 @@
 
     .search-container div {
         margin:0 auto;
+
     }
+
 
     .col-10 form {
         display: inline-block;
@@ -85,6 +87,11 @@
 
 #filter {
     margin-left: 100px;
+}
+
+.bedroom {
+  background-color: Transparent;
+  border: none;
 }
 
 </style>
@@ -146,25 +153,35 @@
                       <option value="TOWNHOUSE%2FROWHOUSE">Townhouse/Rowhouse</option>
                       <option value="CONDOMINIUM">Condominium</option>
                     </select><br>
-                   
+                   <br>
                     Bedrooms 
-                    <select name="min_no_bed">
-                      <option value="">Min</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                    </select>
-                   
-                    <select name="max_no_bed">
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                      <label class="btn btn-secondary active">
+                        <input name="min_no_bed" type="radio" value="1" checked> 1+
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="min_no_bed" type="radio" value="2"> 2+
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="min_no_bed" type="radio" value="3"> 3+
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="min_no_bed" type="radio" value="4"> 4+
+                      </label>
+                      <label class="btn btn-secondary">
+                        <input name="min_no_bed" type="radio" value="5"> 5+
+                      </label>
+                    </div>
+                   <br>
+                   <br>
+                   <!--  <select name="max_no_bed">
                       <option value=""> Max</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
-                    </select>
+                    </select> -->
                     Bathrooms
                     <select name="min_no_bath">
                       <option value="">Min</option>

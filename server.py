@@ -203,6 +203,7 @@ def get_user_input():
                 search_params[search_param] = value      
         sales_data = utility.get_result_from_api(ONBOARD_URL, sale_url, headers, search_params)       
         # pprint.pprint(sales_data)
+        print search_params,"+++++++++++"
         property_sales = utility.get_area_sale_list(sales_data)
         sales_info = utility.get_pro_sale_info(sales_data)
 
