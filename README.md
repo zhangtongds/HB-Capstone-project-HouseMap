@@ -7,3 +7,7 @@ HouseMap was created by Tong Zhang, a software engineer in Mountain View, CA. Le
 Python, Flask, SQLAlchemy, HTML, CSS, Jinja, JavaScript, jQuery and AJAX, ChartJS, PostgreSQL, Bootstrap, Numpy
 ## API Used
 Onboard Informatics API(property data, sales history and  trends), Zillow API(Zillow estimates, Zillow URL), Google Maps API(maps, info windows), Google Places API(autocompletion feature)
+## Looking Forward
+* Property recommendations for user using maching learning classfiers.
+* Interactive charts where user can filter out results by year, property type, etc.
+
