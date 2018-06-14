@@ -67,7 +67,7 @@ function addInfoWindow() {
   let propSize = info.prop_size
   let yearBuilt = info.year_built
   let contentString = '<div id="content">' +
-    '<h2>Property Details:</h2>' +
+    '<h5>Property Details:</h5>' +
     "Property size: " + propSize + '<br>' +
     "Year Built: " + yearBuilt + '<br>' +
     "Number of beds: " + noBeds + '<br>' +

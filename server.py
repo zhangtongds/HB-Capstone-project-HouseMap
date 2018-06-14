@@ -231,7 +231,6 @@ def get_user_input():
                     trend_data = trend_response.json()
                     # print pprint.pprint(trend_data)
                     area_trend = utility.get_area_sale_trend(trend_data)
-                    print percent_25_price, "===================="
                     return render_template("region-search-results.html", median_price=median_price,
                                                                         no_results=no_results,
                                                                         area=area,

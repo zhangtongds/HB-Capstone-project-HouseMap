@@ -31,6 +31,7 @@
     }
     #filter {
         color: White;
+        margin-left: 95px !important;
     }
 
     .search-container div {
@@ -117,8 +118,8 @@
             <div class="search-container container">
                 <div class="row col-lg-6" style="padding: 0px;">
                     <div class="col-lg-12 btn-group btn-group-toggle" role="group" id="searchtype">
-                        <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'zipcode' }}" href="?search_type=zipcode">Zipcode</a><br>
-                        <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'address' }}" href="?search_type=address">Address</a><br>
+                      <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'zipcode' }}" href="?search_type=zipcode">Zipcode</a><br>
+                      <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'address' }}" href="?search_type=address">Address</a><br> 
                         <a class="col-sm-4 btn btn-primary btn-block {{ 'active' if search_type == 'city' }}" href="?search_type=city">City</a><br>
                         
                     </div>
@@ -142,11 +143,11 @@
         <br>
         <br>
         <br>
-        <div class="row align-items-center" id="advanced-filter" style="display:none">
+        <div class="row align-items-center" id="advanced-filter" style="display:none;">
             <div class="col-7 mx-auto">
             <div id="filter">
                 {% if search_type != 'address' %}
-                Property Type
+               <!--  Property Type -->
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                       <label class="btn btn-secondary active">
                         <input name="property_type" type="radio" value="SFR" checked> Single Family
@@ -171,23 +172,22 @@
                    <br>
                     Bedrooms 
                     <div class="bedroom btn-group btn-group-toggle" data-toggle="buttons">
-                      <label class="btn btn-secondary active">
+                      <label class="btn btn-secondary btn-sm active">
                         <input name="min_no_bed" type="radio" value="1" checked> 1+
                       </label>
-                      <label class="btn btn-secondary">
+                      <label class="btn btn-secondary btn-sm">
                         <input name="min_no_bed" type="radio" value="2"> 2+
                       </label>
-                      <label class="btn btn-secondary">
+                      <label class="btn btn-secondary btn-sm">
                         <input name="min_no_bed" type="radio" value="3"> 3+
                       </label>
-                      <label class="btn btn-secondary">
+                      <label class="btn btn-secondary btn-sm">
                         <input name="min_no_bed" type="radio" value="4"> 4+
                       </label>
-                      <label class="btn btn-secondary">
+                      <label class="btn btn-secondary btn-sm">
                         <input name="min_no_bed" type="radio" value="5"> 5+
                       </label>
                     </div>
-                   <br>
                    <br>
                    <!--  <select name="max_no_bed">
                       <option value=""> Max</option>
@@ -197,7 +197,7 @@
                       <option value="4">4</option>
                       <option value="5">5</option>
                     </select> -->
-                    Bathrooms
+                    <!-- Bathrooms
                     <select name="min_no_bath">
                       <option value="">Min</option>
                       <option value="1">1</option>
@@ -214,11 +214,12 @@
                       <option value="3">3</option>
                       <option value="4">4</option>
                       <option value="5">5</option>
-                    </select><br>
-                    Transactions from: <input type="date", name="trans_date_from" style="width: 150px;">
-                    to: <input type="date", name="trans_date_to" style="width: 150px;"><br>
+                    </select><br> -->
+                   <!--  Transactions from: <input type="date", name="trans_date_from" style="width: 150px;"> -->
+                    <!-- to: <input type="date", name="trans_date_to" style="width: 150px;"><br> -->
+                    <br>
                     Price from: <input type="number", name="price_from" style="width: 150px;">
-                    to: <input type="number", name="price_to" style="width: 150px;"><br>
+                    to: <input type="number", name="price_to" style="width: 150px;"><br><br>
                     
                 {% endif %}
                  <button type="reset" class="btn btn-secondary btn-sm" name='reset'> Reset
